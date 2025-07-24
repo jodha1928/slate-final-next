@@ -8,21 +8,28 @@ export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
   const videoRef = useRef(null);
 
+  const creatingVaultVideos = [
+    "/videos/creating_vault_1.mp4",
+    "/videos/creating_vault_2.mp4",
+    "/videos/creating_vault_3.mp4",
+  ];
+  const [creatingVaultIndex, setCreatingVaultIndex] = useState(0);
+
   const stepsBorrow = [
     {
       title: "Creating a Vault",
       number: "01",
-      video: "/lendingvideos/creating_vault (1).mp4",
+      video: "/videos/creating_vault_1.mp4",
     },
     {
       title: "Managing a Vault",
       number: "02",
-      video: "/lendingvideos/withdraw_jusd.mp4",
+      video: "/videos/withdraw_jusd_1.mp4",
     },
     {
       title: "Liquidation",
       number: "03",
-      video: "/lendingvideos/liquidation.mp4",
+      video: "/videos/lending_liquidation_2.mp4",
     },
   ];
 
@@ -50,7 +57,7 @@ export default function HowItWorks() {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.load();
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
   }, [currentVideo]);
 
@@ -64,9 +71,9 @@ export default function HowItWorks() {
 
   // Videos for inner buttons under "Managing a Vault"
   const manageVaultVideos = [
-    "/lendingvideos/withdraw_jusd.mp4",
-    "/lendingvideos/withdraw_collateral.mp4",
-    "/lendingvideos/repay_jusd.mp4",
+    "/videos/withdraw_jusd_1.mp4",
+    "/videos/withdraw_collateral_1.mp4",
+    "/videos/repay_jusd_1.mp4",
     "/lendingvideos/add_collateral.mp4",
   ];
 
@@ -82,7 +89,7 @@ export default function HowItWorks() {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.load();
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
   }, [displayVideo]);
 
@@ -97,6 +104,28 @@ export default function HowItWorks() {
       setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
     }
   }, [tab]);
+
+  useEffect(() => {
+    // Reset index when leaving "Creating a Vault"
+    if (steps[activeStep]?.title !== "Creating a Vault") {
+      setCreatingVaultIndex(0);
+    }
+  }, [activeStep, tab, steps]);
+
+  // Optimize displayVideo assignment
+  if (tab === "borrow" && steps[activeStep]?.title === "Creating a Vault") {
+    displayVideo = creatingVaultVideos[creatingVaultIndex];
+  } else if (tab === "borrow" && steps[activeStep]?.title === "Managing a Vault") {
+    displayVideo = manageVaultVideos[activeInnerButtonMap.borrow ?? 0];
+  }
+
+  const handlePrevVaultVideo = () => {
+    if (creatingVaultIndex > 0) setCreatingVaultIndex(creatingVaultIndex - 1);
+  };
+  const handleNextVaultVideo = () => {
+    if (creatingVaultIndex < creatingVaultVideos.length - 1) setCreatingVaultIndex(creatingVaultIndex + 1);
+  };
+
 
   return (
     <div className={styles.howItWorks}>
@@ -155,6 +184,17 @@ export default function HowItWorks() {
 
           <div className={styles.rightCol}>
             <div className={styles.illustration}>
+              {steps[activeStep]?.title === "Creating a Vault" && (
+                <div
+                  className={`${styles.arrowIconPrev} ${creatingVaultIndex === 0 ? styles.disabled : ""}`}
+                  onClick={creatingVaultIndex === 0 ? undefined : handlePrevVaultVideo}
+                  style={{ cursor: creatingVaultIndex === 0 ? "not-allowed" : "pointer" }}
+                >
+                  <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.1631 6.20391C11.5497 6.20391 11.8631 5.89051 11.8631 5.50391C11.8631 5.11731 11.5497 4.80391 11.1631 4.80391L11.1631 6.20391ZM1.09194 5.00893C0.818572 5.2823 0.818572 5.72551 1.09194 5.99888L5.54671 10.4537C5.82008 10.727 6.26329 10.727 6.53666 10.4537C6.81003 10.1803 6.81003 9.73707 6.53666 9.4637L2.57686 5.50391L6.53666 1.54411C6.81003 1.27074 6.81003 0.827526 6.53666 0.554159C6.26329 0.280792 5.82008 0.280792 5.54671 0.554159L1.09194 5.00893ZM11.1631 5.50391L11.1631 4.80391L1.58691 4.80391L1.58691 5.50391L1.58691 6.20391L11.1631 6.20391L11.1631 5.50391Z" fill="#606060" />
+                  </svg>
+                </div>
+              )}
               <video
                 key={displayVideo}
                 ref={videoRef}
@@ -163,6 +203,17 @@ export default function HowItWorks() {
                 muted
                 className={styles.videoPlayer}
               />
+              {steps[activeStep]?.title === "Creating a Vault" && (
+                <div
+                  className={`${styles.arrowIconNext} ${creatingVaultIndex === creatingVaultVideos.length - 1 ? styles.disabled : ""}`}
+                  onClick={creatingVaultIndex === creatingVaultVideos.length - 1 ? undefined : handleNextVaultVideo}
+                  style={{ cursor: creatingVaultIndex === creatingVaultVideos.length - 1 ? "not-allowed" : "pointer" }}
+                >
+                  <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.28613 6.20391C0.899533 6.20391 0.586133 5.89051 0.586133 5.50391C0.586133 5.11731 0.899534 4.80391 1.28613 4.80391L1.28613 6.20391ZM11.3573 5.00893C11.6306 5.2823 11.6306 5.72551 11.3573 5.99888L6.90251 10.4537C6.62914 10.727 6.18592 10.727 5.91256 10.4537C5.63919 10.1803 5.63919 9.73707 5.91256 9.4637L9.87236 5.50391L5.91256 1.54411C5.63919 1.27074 5.63919 0.827526 5.91256 0.554159C6.18592 0.280792 6.62914 0.280792 6.90251 0.554159L11.3573 5.00893ZM1.28613 5.50391L1.28613 4.80391L10.8623 4.80391L10.8623 5.50391L10.8623 6.20391L1.28613 6.20391L1.28613 5.50391Z" fill="#606060" />
+                  </svg>
+                </div>
+              )}
             </div>
           </div>
         </div>
