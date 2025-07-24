@@ -1,0 +1,122 @@
+.howItWorks {
+    border-top: 1px dashed #BCBCBC;
+    border-bottom: 1px dashed #BCBCBC;
+}
+
+.howItWorksWrapper {
+    border-left: 1px dashed #BCBCBC;
+    border-right: 1px dashed #BCBCBC;
+    padding: 100px 50px;
+}
+
+.mainHead {
+    font-family: var(--font-merriweather);
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -1.5px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.tabSwitcherBox {
+    text-align: center;
+}
+
+.tabSwitcher {
+    background-color: #E3E3E3;
+    border-radius: 30px;
+    padding: 4px;
+    display: inline-flex;
+    margin: 0 auto 50px;
+    justify-content: center;
+    button {
+        padding: 4px 30px;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        letter-spacing: -1px;
+        border-radius: 25px;
+        background-color: transparent;
+        color: #767676;
+    }
+    .activeTab {
+        background: #ffffff;
+        color: #0A0A0A;
+    }
+}
+
+.contentRow {
+    display: flex;
+}
+
+.rightCol {
+    flex: 1;
+    padding-left: 24px;
+}
+
+.stepBox {
+    margin: 0px 0px 26px;
+    width: 285px;
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.stepTitle {
+    color: #ACACAC;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: dashed;
+    border-color: rgb(188, 188, 188);
+    border-image: initial;
+    padding: 20px;
+    border-radius: 2px;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -1.4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &.activeStep {
+        color: #0A0A0A;
+        border-color: #0A0A0A;
+    }
+}
+
+.stepNumber {
+    font-size: 11px;
+    letter-spacing: normal;
+    font-weight: 500;
+    font-family: "IBM Plex Mono";
+}
+
+.videoPlayer {
+    width: 100%;
+    min-height: 440px;
+}
+
+.innerButtons {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -4px -4px;
+    padding: 15px 0 0;
+}
+
+.actionItem {
+    width: calc(50% - 8px);
+    margin: 0 4px 8px;
+    font-size: 14px;
+    letter-spacing: -0.85px;
+    background-color: transparent;
+    font-family: "apercu pro";
+    border: 1px solid #ADADAD;
+    border-radius: 2px;
+    padding: 8px;
+    color: #888888;
+    cursor: pointer;
+    &.active {
+        background-color: #000;
+        border-color: #000;
+        color: #fff;
+    }
+}

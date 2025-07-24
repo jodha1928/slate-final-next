@@ -1,0 +1,256 @@
+.slateTokenWrapper {
+    border-left: 1px dashed #BCBCBC;
+    border-right: 1px dashed #BCBCBC;
+}
+
+.slateTokenContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 50px;
+    border-bottom: 1px dashed #BCBCBC;
+    position: relative;
+    &::before {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        left: -3px;
+        top: -3px;
+    }
+    &::after {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+    }
+}
+
+.slateTokenText {
+    font-family: var(--font-merriweather);
+    font-size: 20px;
+    line-height: 130%;
+    font-weight: 300;
+    letter-spacing: -0.6px;
+    color: #2d2d2d;
+    text-align: right;
+}
+
+.slateTokenInnerSection {
+    padding: 60px 50px;
+    position: relative;
+    &::before {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        left: -3px;
+        top: -3px;
+    }
+    &::after {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+    }
+}
+
+.slateTokenDescription {
+    font-size: 20px;
+    line-height: 126%;
+    letter-spacing: -0.4px;
+    font-weight: 400;
+    color: #4E4E4E;
+}
+
+.tokenUtility {
+    margin-top: 50px;
+    border-top: 1px dashed #BCBCBC;
+    padding-top: 40px;
+}
+
+.tokenUtilityTitle {
+    font-family: var(--font-merriweather);
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 89%;
+    letter-spacing: -0.72px;
+    margin-bottom: 40px;
+}
+
+.slateTokenBox {
+    position: relative;
+}
+
+.slateTokenBgLeft {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc((100% - 1024px) / 2);
+    height: 100%;
+    background-image: url('/slatetoken-pattern.png');
+}
+
+.slateTokenBgRight {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc((100% - 1024px) / 2);
+    height: 100%;
+    background-image: url('/slatetoken-pattern.png');
+}
+
+.tokenUtilityList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.tokenUtilityItem {
+    width: calc(50% - 15px);
+    display: flex;
+}
+
+.tokenUtilityIcon {
+    height: 69px;
+    width: 69px;
+    margin-right: 24px;
+    background-color: #EAEAEA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tokenUtilityContent {
+    max-width: calc(100% - 69px - 24px);
+}
+
+.tokenUtilityContentTitle {
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -1.4px;
+    line-height: 100%;
+    color: #4E4E4E;
+    margin-bottom: 10px;
+}
+
+.tokenUtilityContentDescription,
+.initialAirdropItemDesc {
+    color: #A1A1A1;
+    font-size: 14px;
+    line-height: 128%;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-family: "IBM Plex Mono";
+}
+
+.tokenUtilityPercentage {
+    font-family: var(--font-merriweather);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 100%;
+    letter-spacing: -0.72px;
+    color: #4E4E4E;
+}
+
+.earningMechanismList {
+    display: flex;
+    gap: 20px;
+}
+
+.earningMechanismItem {
+    width: calc(25% - 10px);
+}
+
+.earningMechanismNumber {
+    font-size: 11px;
+    letter-spacing: normal;
+    font-weight: 500;
+    font-family: "IBM Plex Mono";
+    margin-bottom: 10px;
+    display: block;
+    color: #A1A1A1;
+}
+
+.earningMechanismTitle {
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: -1.4px;
+    font-weight: 400;
+    color: #1D1D1D;
+    opacity: 0.8;
+    max-width: 80%;
+}
+
+.initialAirdrop {
+    display: flex;
+    justify-content: space-between;
+}
+
+.initialAirdropContent {
+    width: calc(100% - 550px);
+    h6 {
+        margin-bottom: 15px;
+    }
+}
+
+.initialAirdropDescription,
+.tokenUtilityDescription {
+    font-size: 20px;
+    line-height: 110%;
+    font-weight: 500;
+    color: #4E4E4E;
+    letter-spacing: -1.4px;
+}
+
+.tokenUtilityDescription {
+    max-width: 390px;
+}
+
+.initialAirdropList {
+    width: 420px;
+}
+
+.initialAirdropEligibility {
+    border: 1px dashed #BCBCBC;
+    display: inline-block;
+    padding: 6px 20px;
+    font-size: 20px;
+    line-height: 110%;
+    font-weight: 500;
+    color: #4E4E4E;
+    letter-spacing: -1.4px;
+    margin-bottom: 12px;
+}
+
+.initialAirdropItem {
+    margin-bottom: 30px;
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.protocolBuybacksTitle {
+    margin-bottom: 15px;
+}
+
+.protocolBuybacksList {
+    margin-top: 60px;
+    margin-bottom: 90px;
+}
+
+.buyBackUsage {
+    margin-bottom: 10px;
+}
