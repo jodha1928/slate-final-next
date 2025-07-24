@@ -18,6 +18,42 @@
     text-align: center;
 }
 
+.illustration {
+    position: relative;
+    padding: 0 40px;
+}
+
+.arrowIconPrev,
+.arrowIconNext {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #E3E3E3;
+    z-index: 11;
+}
+
+.arrowIconNext {
+    right: 0;
+}
+
+.arrowIconPrev {
+    left: 0;
+}
+
+.arrowIconPrev.disabled,
+.arrowIconNext.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .tabSwitcherBox {
     text-align: center;
 }
