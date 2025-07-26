@@ -167,13 +167,13 @@ export default function SlateToken() {
                         </div>
                         <div className={styles.tokenUtility}>
                             <h6 className={styles.tokenUtilityTitle}>Token Distribution</h6>
-                            <div className={styles.tokenUtilityList}>
+                            <div className={`${styles.tokenUtilityList} ${styles.tokenDistributionList}`}>
                                 {tokenDistributionItems.map((item, idx) => (
                                     <div className={styles.tokenUtilityItem} key={idx}>
-                                        <div className={styles.tokenUtilityIcon}>
+                                        <div className={`${styles.tokenUtilityIcon} ${styles.tokenUtilityIconPercentage}`}>
                                             <span className={styles.tokenUtilityPercentage}>{item.percentage}</span>
                                         </div>
-                                        <div className={styles.tokenUtilityContent}>
+                                        <div className={`${styles.tokenUtilityContent} ${styles.tokenUtilityContentDistribution}`}>
                                             <h6 className={styles.tokenUtilityContentTitle}>
                                                 {item.title}
                                             </h6>

@@ -1,6 +1,13 @@
 .bannerWrapper {
     padding: 50px 20px 20px;
     text-align: center;
+    video {
+        max-width: 100%;
+        height: auto;
+    }
+    @media screen and (max-width: 768px) {
+        padding: 30px 15px;
+    }
 }
 
 .mainHead {
@@ -9,6 +16,11 @@
     font-weight: 300;
     letter-spacing: -2px;
     margin-bottom: 16px;
+    @media screen and (max-width: 768px) {
+        font-size: 42px;
+        letter-spacing: -1.5px;
+        line-height: 110%;
+    }
 }
 
 .subHead {
@@ -18,4 +30,9 @@
     color: #747474;
     font-weight: 500;
     letter-spacing: -1.15px;
+    @media screen and (max-width: 768px) {
+        font-size: 16px;
+        line-height: 120%;
+        letter-spacing: -0.96px;
+    }
 }

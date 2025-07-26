@@ -35,7 +35,7 @@ export default function Banner() {
           playsInline
           loop={false}
           controls={false}
-          style={{ width: "400px", height: "auto", marginBottom: "2rem" }}
+          style={{ width: "400px", height: "auto" }}
         />
       </div>
     </div>

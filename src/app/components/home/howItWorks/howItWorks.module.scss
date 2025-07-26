@@ -1,12 +1,21 @@
 .howItWorks {
     border-top: 1px dashed #BCBCBC;
     border-bottom: 1px dashed #BCBCBC;
+    @media screen and (max-width: 768px) {
+        padding: 0 15px;
+    }
 }
 
 .howItWorksWrapper {
     border-left: 1px dashed #BCBCBC;
     border-right: 1px dashed #BCBCBC;
     padding: 100px 50px;
+    @media only screen and (max-width: 991px) {
+        padding: 50px 20px;
+    }
+    @media only screen and (max-width: 768px) {
+        padding: 25px 0;
+    }
 }
 
 .mainHead {
@@ -16,11 +25,19 @@
     letter-spacing: -1.5px;
     margin-bottom: 24px;
     text-align: center;
+    @media only screen and (max-width: 768px) {
+        font-size: 24px;
+        letter-spacing: -1.2px;
+        margin-bottom: 16px;
+    }
 }
 
 .illustration {
     position: relative;
     padding: 0 40px;
+    @media only screen and (max-width: 768px) {
+        padding: 0 15px;
+    }
 }
 
 .arrowIconPrev,
@@ -38,15 +55,24 @@
     transform: translateY(-50%);
     background-color: #E3E3E3;
     z-index: 11;
+    @media screen and (max-width: 768px) {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 .arrowIconNext {
     right: 0;
-    // fsd
+    @media screen and (max-width: 768px) {
+        right: 5px;
+    }
 }
 
 .arrowIconPrev {
     left: 0;
+    @media screen and (max-width: 768px) {
+        left: 5px;
+    }
 }
 
 .arrowIconPrev.disabled,
@@ -75,20 +101,33 @@
         border-radius: 25px;
         background-color: transparent;
         color: #767676;
+        @media screen and (max-width: 768px) {
+            min-width: 80px;
+            padding: 4px 16px;
+        }
     }
     .activeTab {
         background: #ffffff;
         color: #0A0A0A;
     }
+    @media screen and (max-width: 768px) {
+        margin-bottom: 30px;
+    }
 }
 
 .contentRow {
     display: flex;
+    @media only screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+    }
 }
 
 .rightCol {
     flex: 1;
     padding-left: 24px;
+    @media only screen and (max-width: 768px) {
+        padding-left: 0;
+    }
 }
 
 .stepBox {
@@ -118,6 +157,12 @@
         color: #0A0A0A;
         border-color: #0A0A0A;
     }
+    @media only screen and (max-width: 768px) {
+        font-size: 14px;
+        padding: 8px;
+        letter-spacing: -0.84px;
+        justify-content: center;
+    }
 }
 
 .stepNumber {
@@ -125,11 +170,18 @@
     letter-spacing: normal;
     font-weight: 500;
     font-family: "IBM Plex Mono";
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
 }
 
 .videoPlayer {
     width: 100%;
     min-height: 440px;
+    @media only screen and (max-width: 768px) {
+        height: 270px;
+        min-height: auto;
+    }
 }
 
 .innerButtons {
@@ -155,5 +207,22 @@
         background-color: #000;
         border-color: #000;
         color: #fff;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .leftCol {
+        display: flex;
+        gap: 5px;
+        margin: 0 10px;
+        position: relative;
+        min-height: 120px;
+        .innerButtons {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: calc(100% + 10px);
+            padding: 0;
+        }
     }
 }
