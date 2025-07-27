@@ -1,10 +1,14 @@
 import styles from "./lendingvault.module.scss";
+import Header1 from "../components/common/header1";
+import WhatIsLendingVault from "../components/landingVault/whatIsLandingVault/whatIsLandingVault";
+import KeyBenefits from "../components/landingVault/keyBenefits/keyBenefits";
 
 export default function LendingVault() {
   return (
     <div className={styles.lendingvault}>
-      <h1>LendingVault Page</h1>
-      <p>Welcome to the LendingVault page!</p>
+      <Header1 />
+      <WhatIsLendingVault />
+      <KeyBenefits />
     </div>
   );
 }

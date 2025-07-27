@@ -1,11 +1,11 @@
 "use client";
 
-import styles from "./header.module.scss";
+import styles from "./header1.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function Header() {
+export default function Header1() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     
   return (
@@ -13,7 +13,7 @@ export default function Header() {
       <div className={`${styles.headerWrapper} container`}>
         <div className={styles.mobileLogo}>
           <Link href="/">
-            <Image priority src="/logo.svg" alt="Logo" width={130} height={26} />
+            <Image priority src="/logo2.svg" alt="Logo" width={22} height={32} />
           </Link>
           <div className={styles.menuIcon} onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-menu">
@@ -39,11 +39,11 @@ export default function Header() {
             </li>
             <li className={styles.logo}>
               <Link href="/">
-                <Image priority src="/logo.svg" alt="Logo" width={130} height={26} />
+                <Image priority src="/logo2.svg" alt="Logo" width={22} height={32} />
               </Link>
             </li>
             <li className={styles.menuItem}>
-              <Link href="/lendingvault">Lending Vault</Link>
+              <Link href="/lendingvault" className={styles.active}>Lending Vault</Link>
             </li>
             <li className={styles.menuItem}>
               <Link href="/contact">Contact us</Link>

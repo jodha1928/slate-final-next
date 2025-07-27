@@ -1,13 +1,17 @@
 .lendingvault {
-    padding: 2rem;
-    background: #f9f9f9;
-    border-radius: 12px;
+    background: #020202;
     text-align: center;
-    h1 {
-        color: #2d2d2d;
-        margin-bottom: 1rem;
-    }
-    p {
-        color: #555;
+    min-height: 100vh;
+    position: relative;
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1260px;
+        height: 1160px;
+        background: url('/bggradient.svg') no-repeat center center;
+        z-index: 1;
     }
 }
