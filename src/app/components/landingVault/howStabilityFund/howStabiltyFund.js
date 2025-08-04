@@ -1,17 +1,17 @@
 "use client"
 
-import styles from "./whatIsLandingVault.module.scss";
+import styles from "./howStabiltyFund.module.scss";
 import { useRef, useEffect } from "react";
 
-export default function WhatIsLendingVault() {
+export default function HowStabilityFund() {
     return (
-    <div className={styles.WhatIsLendingVault}>
-      <div className={`${styles.WhatIsLendingVaultWrapper} container`}>
-        <div className={styles.emptyGradiantLine}></div>
-        <h6 className={styles.subHead}>What is</h6>
-        <h1 className={styles.mainHead}>Lending Vault</h1>
-        <div className={styles.emptyGradiantLine}></div>
-        <div className={styles.content}>
+    <div className={styles.HowStabilityFund}>
+      <div className={`${styles.HowStabilityFundWrapper} container`}>
+        <div className={styles.mainHeadContent}>
+            <h2 className={styles.mainHead}>How  Stability Fund Makes<br /> Money for you</h2>
+            <p className={styles.description}>The Stability Fund purchases this collateral at a<br /> 10% discount to market value. </p>
+        </div>
+        {/* <div className={styles.content}>
             <div className={styles.innerContent}>
                 <div className={styles.text}>
                     <h2 className={styles.title}>
@@ -26,7 +26,7 @@ export default function WhatIsLendingVault() {
                 </div>
                 <div className={styles.image}>
                     <video
-                        src="/borrow/creating_vault_1.mp4"
+                        src="/home-banner-1.mp4"
                         autoPlay
                         muted
                         playsInline
@@ -36,7 +36,7 @@ export default function WhatIsLendingVault() {
                     />
                 </div>
             </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

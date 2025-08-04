@@ -228,7 +228,71 @@ export default function HowItWorks() {
             </div>
           </div>
         </div>
-      </div>
+        
+        <div className={styles.stabilityFund}>
+          <div className={styles.leftContent}>
+            <h5 className={styles.subHead}>What is</h5>
+            <h2 className={styles.mainHead}>Stability Fund</h2>
+          </div>
+          <div className={styles.rightContent}>
+            <p className={styles.description}>
+              The Stability Fund provides uncorrelated returns that increase during market downturns. When StETH prices fall, more Lending Vaults become eligible for liquidation.  The Stability Fund purchases this collateral at a 10% discount to market value. This counter-cyclical approach helps protect against drawdowns and delivers higher returns during market stress.
+            </p>
+          </div>
+        </div>
+        <div className={styles.hiwSec}>
+          <div className={styles.leftSec}>
+              <h5 className={styles.innerHead}>How It Works</h5>
+              <ul className={styles.hiwList}>
+                <li className={styles.hiwItem}>
+                  <span className={styles.hiwItemNumber}>1.</span>
+                  <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                </li>
+                <li className={styles.hiwItem}>
+                  <span className={styles.hiwItemNumber}>2.</span>
+                  <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                </li>
+                <li className={styles.hiwItem}>
+                  <span className={styles.hiwItemNumber}>3.</span>
+                  <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                </li>
+                <li className={styles.hiwItem}>
+                  <span className={styles.hiwItemNumber}>4.</span>
+                  <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                </li>
+                <li className={styles.hiwItem}>
+                  <span className={styles.hiwItemNumber}>5.</span>
+                  <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                </li>
+              </ul>
+          </div>
+          <div className={styles.rightSec}>
+            <h2 className={styles.innerHead}>Key Benefits</h2>
+            <div className={styles.benefitList}>
+                <div className={styles.benefitItem}>
+                    <img src="/benefit-1.svg" alt="Benefit 1" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 01 )</span>
+                    <p className={styles.benefitDescription}>Truly uncorrelated returns with no historical drawdowns</p>
+                </div>
+                <div className={styles.benefitItem}>
+                    <img src="/benefit-2.svg" alt="Benefit 2" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 02 )</span>
+                    <p className={styles.benefitDescription}>Returns increase during market volatility and downturns</p>
+                </div>
+                 <div className={styles.benefitItem}>
+                    <img src="/benefit-3.svg" alt="Benefit 3" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 03 )</span>
+                    <p className={styles.benefitDescription}>Seizes StETH at a 10% discount during liquidations</p>
+                </div>
+                 <div className={styles.benefitItem}>
+                    <img src="/benefit-4.svg" alt="Benefit 4" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 04 )</span>
+                    <p className={styles.benefitDescription}>Automatic liquidation process requires no manual trading</p>
+                </div>
+            </div>
+          </div>
+        </div>
     </div>
+  </div>
   );
 }
