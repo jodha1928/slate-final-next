@@ -8,7 +8,6 @@ export default function Banner() {
   const timelines = [
     { artboard: "hero", animation: "portfolio" },
     { artboard: "hero", animation: "deposit" },
-    // If you want to include the other artboard:
     { artboard: "liquidate", animation: "liquidate" },
   ];
 
@@ -21,12 +20,11 @@ export default function Banner() {
     autoplay: true,
   });
 
-  // Auto-switch animation after duration (e.g. 5 seconds)
   useEffect(() => {
     const timer = setTimeout(() => {
       const next = (current + 1) % timelines.length;
       setCurrent(next);
-    }, 5000); // Change duration as needed
+    }, 2000);
     return () => clearTimeout(timer);
   }, [current, timelines.length]);
 
