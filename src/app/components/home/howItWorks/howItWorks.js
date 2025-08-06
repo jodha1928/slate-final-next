@@ -193,8 +193,8 @@ export default function HowItWorks() {
                 )}
               <div
                 style={{
-                  width: "400px",
-                  height: "400px",
+                  width: "500px",
+                  height: "500px",
                   maxWidth: "100%",
                   margin: "0 auto",
                 }}
