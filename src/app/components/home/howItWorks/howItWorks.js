@@ -1,44 +1,8 @@
 "use client";
 
 import styles from "./howItWorks.module.scss";
-import { useState, useRef, useEffect } from "react";
-
-const creatingVaultVideos = [
-  "/borrow/creating_vault_1.mp4",
-  "/borrow/creating_vault_2.mp4",
-  "/borrow/creating_vault_3.mp4",
-];
-
-const liquidationVideos = [
-  "/borrow/liquidation_1.mp4",
-  "/borrow/liquidation_2.mp4",
-  "/borrow/liquidation_3.mp4",
-  "/borrow/liquidation_4.mp4",
-  "/borrow/liquidation_5.mp4",
-  "/borrow/liquidation_6.mp4",
-];
-
-const manageVaultVideos = [
-  "/borrow/withdraw_jusd.mp4",
-  "/borrow/withdraw_collateral.mp4",
-  "/borrow/repay_jusd.mp4",
-  "/borrow/add_collateral.mp4",
-];
-
-const depositJusdVideos = [
-  "/earning/investing_1.mp4",
-  "/earning/investing_2.mp4"
-];
-
-const earnReturnVideos = [
-  "/earning/liquidation_1.mp4",
-  "/earning/liquidation_2.mp4"
-];
-
-const withdrawnVideos = [
-  "/earning/liquidation_3.mp4"
-];
-
+import { useState, useEffect, useMemo } from "react";
+import { useRive } from "@rive-app/react-canvas";
 
 export default function HowItWorks() {
   const [tab, setTab] = useState("borrow");
@@ -48,29 +12,82 @@ export default function HowItWorks() {
   const [depositIndex, setDepositIndex] = useState(0);
   const [earnIndex, setEarnIndex] = useState(0);
   const [activeInnerButtonMap, setActiveInnerButtonMap] = useState({ borrow: 0 });
-  const videoRef = useRef(null);
 
   const stepsBorrow = [
-    { title: "Creating a Vault", number: "01", video: creatingVaultVideos[0] },
-    { title: "Managing a Vault", number: "02", video: manageVaultVideos[0] },
-    { title: "Liquidation", number: "03", video: liquidationVideos[0] },
+    { title: "Creating a Vault", number: "01" },
+    { title: "Managing a Vault", number: "02" },
+    { title: "Liquidation", number: "03" },
   ];
 
   const stepsEarn = [
-    { title: "Deposit JUSD", number: "01", video: depositJusdVideos[0] },
-    { title: "Earn Returns", number: "02", video: earnReturnVideos[0] },
-    { title: "Withdraw Anytime", number: "03", video: withdrawnVideos[0] },
+    { title: "Deposit JUSD", number: "01" },
+    { title: "Earn Returns", number: "02" },
+    { title: "Withdraw Anytime", number: "03" },
   ];
 
   const steps = tab === "borrow" ? stepsBorrow : stepsEarn;
   const currentStep = steps[activeStep]?.title;
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      videoRef.current.play().catch(() => { });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const timelines = useMemo(() => {
+    if (tab === "borrow") {
+      if (currentStep === "Creating a Vault") {
+        return [
+          { artboard: "creating_vault", animation: "creating_vault_1", duration: 4000 },
+          { artboard: "creating_vault", animation: "creating_vault_2", duration: 3000 },
+          { artboard: "creating_vault", animation: "creating_vault_3", duration: 3000 },
+        ];
+      } else if (currentStep === "Liquidation") {
+        return [
+          { artboard: "creating_vault", animation: "liquidation_1", duration: 4000 },
+          { artboard: "creating_vault", animation: "liquidation_2", duration: 3200 },
+          { artboard: "creating_vault", animation: "liquidation_3", duration: 2800 },
+          { artboard: "creating_vault", animation: "liquidation_4", duration: 1000 },
+          { artboard: "creating_vault", animation: "liquidation_5", duration: 3500 },
+          { artboard: "creating_vault", animation: "liquidation_6", duration: 1800 },
+        ];
+      } else if (currentStep === "Managing a Vault") {
+        return [
+          { artboard: "managing_vault", animation: "withdraw_jusd", duration: 5000 },
+          { artboard: "managing_vault", animation: "withdraw_collateral", duration: 4000 },
+          { artboard: "managing_vault", animation: "repay_jusd", duration: 3500 },
+          { artboard: "managing_vault", animation: "add_collateral", duration: 3600 },
+        ];
+      }
+      // } else if (tab === "earn") {
+      //   if (currentStep === "Deposit JUSD") {
+      //     return [
+      //       { artboard: "deposit", animation: "deposit_1" },
+      //       { artboard: "deposit", animation: "deposit_2" },
+      //     ];
+      //   } else if (currentStep === "Earn Returns") {
+      //     return [
+      //       { artboard: "earn_returns", animation: "earn_1" },
+      //       { artboard: "earn_returns", animation: "earn_2" },
+      //     ];
+      //   }
     }
-  }, [tab, activeStep, creatingVaultIndex, liquidationIndex, activeInnerButtonMap]);
+    return [{ artboard: "default", animation: "idle" }];
+  }, [tab, currentStep]);
+
+
+  const [current, setCurrent] = useState(0);
+
+  const riveProps = useMemo(() => {
+    return {
+      src: "/riv/slate_lending_flow.riv",
+      artboard: timelines[current]?.artboard,
+      animations: timelines[current]?.animation,
+      autoplay: true,
+    };
+  }, [timelines, current]);
+
+  const { RiveComponent } = useRive(riveProps);
+
+  useEffect(() => {
+    setCurrent(0);
+  }, [tab, activeStep]);
 
   useEffect(() => {
     setCreatingVaultIndex(0);
@@ -81,19 +98,6 @@ export default function HowItWorks() {
       setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
     }
   }, [tab]);
-
-  const displayVideo = (() => {
-    if (tab === "borrow") {
-      if (currentStep === "Creating a Vault") return creatingVaultVideos[creatingVaultIndex];
-      if (currentStep === "Managing a Vault") return manageVaultVideos[activeInnerButtonMap.borrow ?? 0];
-      if (currentStep === "Liquidation") return liquidationVideos[liquidationIndex];
-    } else {
-      if (currentStep === "Deposit JUSD") return depositJusdVideos[depositIndex];
-      if (currentStep === "Earn Returns") return earnReturnVideos[earnIndex];
-      if (currentStep === "Withdraw Anytime") return withdrawnVideos[0];
-    }
-    return steps[activeStep]?.video;
-  })();
 
   const ArrowButton = ({ direction, disabled, onClick }) => (
     <div
@@ -174,129 +178,36 @@ export default function HowItWorks() {
                   <>
                     <ArrowButton
                       direction="prev"
-                      disabled={
-                        currentStep === "Creating a Vault"
-                          ? creatingVaultIndex === 0
-                          : currentStep === "Liquidation"
-                            ? liquidationIndex === 0
-                            : currentStep === "Deposit JUSD"
-                              ? depositIndex === 0
-                              : currentStep === "Earn Returns"
-                                ? earnIndex === 0
-                                : true
-                      }
-                      onClick={() => {
-                        if (currentStep === "Creating a Vault") setCreatingVaultIndex((i) => i - 1);
-                        else if (currentStep === "Liquidation") setLiquidationIndex((i) => i - 1);
-                        else if (currentStep === "Deposit JUSD") setDepositIndex((i) => i - 1);
-                        else if (currentStep === "Earn Returns") setEarnIndex((i) => i - 1);
-                      }}
+                      disabled={current === 0}
+                      onClick={() => setCurrent((prev) => Math.max(prev - 1, 0))}
                     />
 
                     <ArrowButton
                       direction="next"
-                      disabled={
-                        currentStep === "Creating a Vault"
-                          ? creatingVaultIndex === creatingVaultVideos.length - 1
-                          : currentStep === "Liquidation"
-                            ? liquidationIndex === liquidationVideos.length - 1
-                            : currentStep === "Deposit JUSD"
-                              ? depositIndex === depositJusdVideos.length - 1
-                              : currentStep === "Earn Returns"
-                                ? earnIndex === earnReturnVideos.length - 1
-                                : true
-                      }
-                      onClick={() => {
-                        if (currentStep === "Creating a Vault") setCreatingVaultIndex((i) => i + 1);
-                        else if (currentStep === "Liquidation") setLiquidationIndex((i) => i + 1);
-                        else if (currentStep === "Deposit JUSD") setDepositIndex((i) => i + 1);
-                        else if (currentStep === "Earn Returns") setEarnIndex((i) => i + 1);
-                      }}
+                      disabled={current >= timelines.length - 1}
+                      onClick={() => setCurrent((prev) => Math.min(prev + 1, timelines.length - 1))}
                     />
+
 
                   </>
                 )}
+              <div
+                style={{
+                  width: "400px",
+                  height: "400px",
+                  maxWidth: "100%",
+                  margin: "0 auto",
+                }}
+              >
+                <RiveComponent
+                  key={`${timelines[current].artboard}-${timelines[current].animation}`}
+                />
+              </div>
 
-              <video
-                key={displayVideo}
-                ref={videoRef}
-                src={displayVideo}
-                autoPlay
-                muted
-                className={styles.videoPlayer}
-              />
             </div>
           </div>
         </div>
-        
-        <div className={styles.stabilityFund}>
-          <div className={styles.leftContent}>
-            <h5 className={styles.subHead}>What is</h5>
-            <h2 className={styles.mainHead}>Stability Fund</h2>
-          </div>
-          <div className={styles.rightContent}>
-            <p className={styles.description}>
-              The Stability Fund provides uncorrelated returns that increase during market downturns. When StETH prices fall, more Lending Vaults become eligible for liquidation.  The Stability Fund purchases this collateral at a 10% discount to market value. This counter-cyclical approach helps protect against drawdowns and delivers higher returns during market stress.
-            </p>
-          </div>
-        </div>
-        <div className={styles.hiwSec}>
-          <div className={styles.leftSec}>
-              <h5 className={styles.innerHead}>How It Works</h5>
-              <ul className={styles.hiwList}>
-                <li className={styles.hiwItem}>
-                  <span className={styles.hiwItemNumber}>1.</span>
-                  <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-                </li>
-                <li className={styles.hiwItem}>
-                  <span className={styles.hiwItemNumber}>2.</span>
-                  <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
-                </li>
-                <li className={styles.hiwItem}>
-                  <span className={styles.hiwItemNumber}>3.</span>
-                  <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-                </li>
-                <li className={styles.hiwItem}>
-                  <span className={styles.hiwItemNumber}>4.</span>
-                  <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
-                </li>
-                <li className={styles.hiwItem}>
-                  <span className={styles.hiwItemNumber}>5.</span>
-                  <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-                </li>
-              </ul>
-          </div>
-          <div className={styles.rightSec}>
-            <h2 className={styles.innerHead}>Key Benefits</h2>
-            <div className={styles.benefitList}>
-                <div className={styles.benefitItem}>
-                    <img src="/benefit-1.svg" alt="Benefit 1" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 01 )</span>
-                    <p className={styles.benefitDescription}>Truly uncorrelated returns with no historical drawdowns</p>
-                </div>
-                <div className={styles.benefitItem}>
-                    <img src="/benefit-2.svg" alt="Benefit 2" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 02 )</span>
-                    <p className={styles.benefitDescription}>Returns increase during market volatility and downturns</p>
-                </div>
-                 <div className={styles.benefitItem}>
-                    <img src="/benefit-3.svg" alt="Benefit 3" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 03 )</span>
-                    <p className={styles.benefitDescription}>Seizes StETH at a 10% discount during liquidations</p>
-                </div>
-                 <div className={styles.benefitItem}>
-                    <img src="/benefit-4.svg" alt="Benefit 4" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 04 )</span>
-                    <p className={styles.benefitDescription}>Automatic liquidation process requires no manual trading</p>
-                </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.performace}>
-          <h6 className={styles.supHead}>Performace Comparison</h6>
-          <h2>Stability Fund vs. Traditional Assets</h2>
-        </div>
+      </div>
     </div>
-  </div>
   );
 }
