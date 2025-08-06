@@ -292,6 +292,10 @@ export default function HowItWorks() {
             </div>
           </div>
         </div>
+        <div className={styles.performace}>
+          <h6 className={styles.supHead}>Performace Comparison</h6>
+          <h2>Stability Fund vs. Traditional Assets</h2>
+        </div>
     </div>
   </div>
   );
