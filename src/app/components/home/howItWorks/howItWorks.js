@@ -48,12 +48,13 @@ export default function HowItWorks() {
           { artboard: "creating_vault", animation: "liquidation_6", duration: 1800 },
         ];
       } else if (currentStep === "Managing a Vault") {
-        return [
+        const managingAnimations = [
           { artboard: "managing_vault", animation: "withdraw_jusd", duration: 5000 },
           { artboard: "managing_vault", animation: "withdraw_collateral", duration: 4000 },
           { artboard: "managing_vault", animation: "repay_jusd", duration: 3500 },
           { artboard: "managing_vault", animation: "add_collateral", duration: 3600 },
         ];
+        return [managingAnimations[activeInnerButtonMap.borrow || 0]];
       }
       // } else if (tab === "earn") {
       //   if (currentStep === "Deposit JUSD") {
@@ -69,7 +70,7 @@ export default function HowItWorks() {
       //   }
     }
     return [{ artboard: "default", animation: "idle" }];
-  }, [tab, currentStep]);
+  }, [tab, currentStep, activeInnerButtonMap.borrow]);
 
 
   const [current, setCurrent] = useState(0);
@@ -157,7 +158,10 @@ export default function HowItWorks() {
                       <button
                         key={label}
                         className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
-                        onClick={() => setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }))}
+                        onClick={() => {
+                          setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
+                          setCurrent(0); // reset to current animation
+                        }}
                       >
                         {label}
                       </button>
