@@ -4,6 +4,8 @@ import styles from "./howItWorks.module.scss";
 import { useState, useEffect, useMemo } from "react";
 import { useRive } from "@rive-app/react-canvas";
 
+const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
 export default function HowItWorks() {
   const [tab, setTab] = useState("borrow");
   const [activeStep, setActiveStep] = useState(0);
@@ -34,40 +36,44 @@ export default function HowItWorks() {
     if (tab === "borrow") {
       if (currentStep === "Creating a Vault") {
         return [
-          { artboard: "creating_vault", animation: "creating_vault_1", duration: 4000 },
-          { artboard: "creating_vault", animation: "creating_vault_2", duration: 3000 },
-          { artboard: "creating_vault", animation: "creating_vault_3", duration: 3000 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "creating_vault_1", duration: 4000 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "creating_vault_2", duration: 3000 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "creating_vault_3", duration: 3000 },
         ];
       } else if (currentStep === "Liquidation") {
         return [
-          { artboard: "creating_vault", animation: "liquidation_1", duration: 4000 },
-          { artboard: "creating_vault", animation: "liquidation_2", duration: 3200 },
-          { artboard: "creating_vault", animation: "liquidation_3", duration: 2800 },
-          { artboard: "creating_vault", animation: "liquidation_4", duration: 1000 },
-          { artboard: "creating_vault", animation: "liquidation_5", duration: 3500 },
-          { artboard: "creating_vault", animation: "liquidation_6", duration: 1800 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "liquidation_1", duration: 4000 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "liquidation_2", duration: 3200 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "liquidation_3", duration: 2800 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "liquidation_4", duration: 1000 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "liquidation_5", duration: 4000 },
+          { artboard: isMobile ? "creating_vault_mobile" : "creating_vault", animation: "liquidation_6", duration: 1800 },
         ];
       } else if (currentStep === "Managing a Vault") {
         const managingAnimations = [
-          { artboard: "managing_vault", animation: "withdraw_jusd", duration: 5000 },
-          { artboard: "managing_vault", animation: "withdraw_collateral", duration: 4000 },
-          { artboard: "managing_vault", animation: "repay_jusd", duration: 3500 },
-          { artboard: "managing_vault", animation: "add_collateral", duration: 3600 },
+          { artboard: isMobile ? "managing_vault_mobile" : "managing_vault", animation: "withdraw_jusd", duration: 5000 },
+          { artboard: isMobile ? "managing_vault_mobile" : "managing_vault", animation: "withdraw_collateral", duration: 4000 },
+          { artboard: isMobile ? "managing_vault_mobile" : "managing_vault", animation: "repay_jusd", duration: 4000 },
+          { artboard: isMobile ? "managing_vault_mobile" : "managing_vault", animation: "add_collateral", duration: 3600 },
         ];
         return [managingAnimations[activeInnerButtonMap.borrow || 0]];
       }
-      // } else if (tab === "earn") {
-      //   if (currentStep === "Deposit JUSD") {
-      //     return [
-      //       { artboard: "deposit", animation: "deposit_1" },
-      //       { artboard: "deposit", animation: "deposit_2" },
-      //     ];
-      //   } else if (currentStep === "Earn Returns") {
-      //     return [
-      //       { artboard: "earn_returns", animation: "earn_1" },
-      //       { artboard: "earn_returns", animation: "earn_2" },
-      //     ];
-      //   }
+    } else if (tab === "earn") {
+      if (currentStep === "Deposit JUSD") {
+        return [
+          { artboard: isMobile ? "investing_mobile" : "investing", animation: "investing_1", duration: 2500 },
+          { artboard: isMobile ? "investing_mobile" : "investing", animation: "investing_2", duration: 4000 },
+        ];
+      } else if (currentStep === "Earn Returns") {
+        return [
+          { artboard: isMobile ? "investing_mobile" : "investing", animation: "liquidation_1", duration: 4000 },
+          { artboard: isMobile ? "investing_mobile" : "investing", animation: "liquidation_2", duration: 7500 },
+        ];
+      } else if (currentStep === "Withdraw Anytime") {
+        return [
+          { artboard: isMobile ? "investing_mobile" : "investing", animation: "liquidation_3", duration: 4000 },
+        ];
+      }
     }
     return [{ artboard: "default", animation: "idle" }];
   }, [tab, currentStep, activeInnerButtonMap.borrow]);
@@ -77,12 +83,12 @@ export default function HowItWorks() {
 
   const riveProps = useMemo(() => {
     return {
-      src: "/riv/slate_lending_flow.riv",
+      src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
       artboard: timelines[current]?.artboard,
       animations: timelines[current]?.animation,
       autoplay: true,
     };
-  }, [timelines, current]);
+  }, [tab, timelines, current]);
 
   const { RiveComponent } = useRive(riveProps);
 
@@ -131,7 +137,10 @@ export default function HowItWorks() {
               <button
                 key={type}
                 className={tab === type ? styles.activeTab : styles.inactiveTab}
-                onClick={() => setTab(type)}
+                onClick={() => {
+                  setTab(type);
+                  setCurrent(0); // reset to current animation
+                }}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
@@ -203,9 +212,11 @@ export default function HowItWorks() {
                   margin: "0 auto",
                 }}
               >
-                <RiveComponent
-                  key={`${timelines[current].artboard}-${timelines[current].animation}`}
-                />
+                {timelines[current] ? (
+                  <RiveComponent
+                    key={`${timelines[current].artboard}-${timelines[current].animation}`}
+                  />
+                ) : null}
               </div>
 
             </div>
