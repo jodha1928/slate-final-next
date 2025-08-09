@@ -1,19 +1,15 @@
 "use client";
 
 import styles from "./howItWorks.module.scss";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRive } from "@rive-app/react-canvas";
-
 
 export default function HowItWorks() {
   const [tab, setTab] = useState("borrow");
   const [activeStep, setActiveStep] = useState(0);
-  const [creatingVaultIndex, setCreatingVaultIndex] = useState(0);
-  const [liquidationIndex, setLiquidationIndex] = useState(0);
-  const [depositIndex, setDepositIndex] = useState(0);
-  const [earnIndex, setEarnIndex] = useState(0);
   const [activeInnerButtonMap, setActiveInnerButtonMap] = useState({ borrow: 0 });
   const [isMobile, setIsMobile] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -41,8 +37,6 @@ export default function HowItWorks() {
   const steps = tab === "borrow" ? stepsBorrow : stepsEarn;
   const currentStep = steps[activeStep]?.title;
 
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const timelines = useMemo(() => {
     if (tab === "borrow") {
       if (currentStep === "Creating a Vault") {
@@ -89,7 +83,6 @@ export default function HowItWorks() {
     return [{ artboard: "default", animation: "idle" }];
   }, [tab, currentStep, isMobile, activeInnerButtonMap.borrow]);
 
-
   const [current, setCurrent] = useState(0);
 
   const riveProps = useMemo(() => {
@@ -98,26 +91,53 @@ export default function HowItWorks() {
       artboard: timelines[current]?.artboard,
       animations: timelines[current]?.animation,
       autoplay: true,
+      shouldDisableRiveListeners: true,
     };
   }, [tab, timelines, current]);
 
-  const { RiveComponent } = useRive(riveProps);
+  const { RiveComponent, rive } = useRive(riveProps);
+
+  // Handle animation transitions smoothly
+  const handleAnimationChange = useCallback((direction) => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    
+    // Fade out current animation
+    if (rive) {
+      rive.pause();
+    }
+    
+    // Change animation after a very short delay
+    setTimeout(() => {
+      setCurrent(prev => {
+        const newCurrent = direction === 'next' 
+          ? Math.min(prev + 1, timelines.length - 1)
+          : Math.max(prev - 1, 0);
+        return newCurrent;
+      });
+      
+      // Fade in new animation
+      setTimeout(() => {
+        if (rive) {
+          rive.play();
+        }
+        setIsAnimating(false);
+      }, 50);
+    }, 50);
+  }, [rive, isAnimating, timelines.length]);
 
   useEffect(() => {
     setCurrent(0);
   }, [tab, activeStep]);
 
   useEffect(() => {
-    setCreatingVaultIndex(0);
-    setLiquidationIndex(0);
-    setDepositIndex(0);
-    setEarnIndex(0);
     if (tab !== "borrow") {
       setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
     }
   }, [tab]);
 
-  const ArrowButton = ({ direction, disabled, onClick }) => (
+  const ArrowButton = useCallback(({ direction, disabled, onClick }) => (
     <div
       className={`${direction === "prev" ? styles.arrowIconPrev : styles.arrowIconNext} ${disabled ? styles.disabled : ""}`}
       onClick={disabled ? undefined : onClick}
@@ -134,7 +154,7 @@ export default function HowItWorks() {
         />
       </svg>
     </div>
-  );
+  ), []);
 
   return (
     <div className={styles.howItWorks}>
@@ -150,7 +170,7 @@ export default function HowItWorks() {
                 className={tab === type ? styles.activeTab : styles.inactiveTab}
                 onClick={() => {
                   setTab(type);
-                  setCurrent(0); // reset to current animation
+                  setCurrent(0);
                 }}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -180,7 +200,7 @@ export default function HowItWorks() {
                         className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
                         onClick={() => {
                           setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
-                          setCurrent(0); // reset to current animation
+                          setCurrent(0);
                         }}
                       >
                         {label}
@@ -199,107 +219,39 @@ export default function HowItWorks() {
                 (tab === "borrow" && (currentStep === "Creating a Vault" || currentStep === "Liquidation")) ||
                 (tab === "earn" && (currentStep === "Deposit JUSD" || currentStep === "Earn Returns"))
               ) && (
-                  <>
-                    <ArrowButton
-                      direction="prev"
-                      disabled={current === 0}
-                      onClick={() => setCurrent((prev) => Math.max(prev - 1, 0))}
-                    />
+                <>
+                  <ArrowButton
+                    direction="prev"
+                    disabled={current === 0 || isAnimating}
+                    onClick={() => handleAnimationChange('prev')}
+                  />
 
-                    <ArrowButton
-                      direction="next"
-                      disabled={current >= timelines.length - 1}
-                      onClick={() => setCurrent((prev) => Math.min(prev + 1, timelines.length - 1))}
-                    />
-
-
-                  </>
-                )}
+                  <ArrowButton
+                    direction="next"
+                    disabled={current >= timelines.length - 1 || isAnimating}
+                    onClick={() => handleAnimationChange('next')}
+                  />
+                </>
+              )}
               <div
                 style={{
                   width: "500px",
                   height: "500px",
                   maxWidth: "100%",
                   margin: "0 auto",
+                  opacity: isAnimating ? 0.7 : 1,
+                  transition: 'opacity 0.1s ease',
                 }}
               >
-                {timelines[current] ? (
+                {timelines[current] && (
                   <RiveComponent
-                    key={`${timelines[current].artboard}-${timelines[current].animation}`}
+                    key={`${tab}-${currentStep}-${current}-${activeInnerButtonMap.borrow}`}
                   />
-                ) : null}
-              </div>
-
-            </div>
-          </div>
-        </div>
-        {/* <div className={styles.stabilityFund}>
-          <div className={styles.leftContent}>
-            <h5 className={styles.subHead}>What is</h5>
-            <h2 className={styles.mainHead}>Stability Fund</h2>
-          </div>
-          <div className={styles.rightContent}>
-            <p className={styles.description}>
-              The Stability Fund provides uncorrelated returns that increase during market downturns. When StETH prices fall, more Lending Vaults become eligible for liquidation.  The Stability Fund purchases this collateral at a 10% discount to market value. This counter-cyclical approach helps protect against drawdowns and delivers higher returns during market stress.
-            </p>
-          </div>
-        </div>
-        <div className={styles.hiwSec}>
-          <div className={styles.leftSec}>
-            <h5 className={styles.innerHead}>How It Works</h5>
-            <ul className={styles.hiwList}>
-              <li className={styles.hiwItem}>
-                <span className={styles.hiwItemNumber}>1.</span>
-                <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-              </li>
-              <li className={styles.hiwItem}>
-                <span className={styles.hiwItemNumber}>2.</span>
-                <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
-              </li>
-              <li className={styles.hiwItem}>
-                <span className={styles.hiwItemNumber}>3.</span>
-                <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-              </li>
-              <li className={styles.hiwItem}>
-                <span className={styles.hiwItemNumber}>4.</span>
-                <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
-              </li>
-              <li className={styles.hiwItem}>
-                <span className={styles.hiwItemNumber}>5.</span>
-                <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-              </li>
-            </ul>
-          </div>
-          <div className={styles.rightSec}>
-            <h2 className={styles.innerHead}>Key Benefits</h2>
-            <div className={styles.benefitList}>
-              <div className={styles.benefitItem}>
-                <img src="/benefit-1.svg" alt="Benefit 1" className={styles.benefitImage} />
-                <span className={styles.benefitCount}>( 01 )</span>
-                <p className={styles.benefitDescription}>Truly uncorrelated returns with no historical drawdowns</p>
-              </div>
-              <div className={styles.benefitItem}>
-                <img src="/benefit-2.svg" alt="Benefit 2" className={styles.benefitImage} />
-                <span className={styles.benefitCount}>( 02 )</span>
-                <p className={styles.benefitDescription}>Returns increase during market volatility and downturns</p>
-              </div>
-              <div className={styles.benefitItem}>
-                <img src="/benefit-3.svg" alt="Benefit 3" className={styles.benefitImage} />
-                <span className={styles.benefitCount}>( 03 )</span>
-                <p className={styles.benefitDescription}>Seizes StETH at a 10% discount during liquidations</p>
-              </div>
-              <div className={styles.benefitItem}>
-                <img src="/benefit-4.svg" alt="Benefit 4" className={styles.benefitImage} />
-                <span className={styles.benefitCount}>( 04 )</span>
-                <p className={styles.benefitDescription}>Automatic liquidation process requires no manual trading</p>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className={styles.performace}>
-          <h6 className={styles.supHead}>Performace Comparison</h6>
-          <h2>Stability Fund vs. Traditional Assets</h2>
-        </div> */}
       </div>
     </div>
   );
