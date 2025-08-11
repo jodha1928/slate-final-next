@@ -100,23 +100,23 @@ export default function HowItWorks() {
   // Handle animation transitions smoothly
   const handleAnimationChange = useCallback((direction) => {
     if (isAnimating) return;
-    
+
     setIsAnimating(true);
-    
+
     // Fade out current animation
     if (rive) {
       rive.pause();
     }
-    
+
     // Change animation after a very short delay
     setTimeout(() => {
       setCurrent(prev => {
-        const newCurrent = direction === 'next' 
+        const newCurrent = direction === 'next'
           ? Math.min(prev + 1, timelines.length - 1)
           : Math.max(prev - 1, 0);
         return newCurrent;
       });
-      
+
       // Fade in new animation
       setTimeout(() => {
         if (rive) {
@@ -219,20 +219,20 @@ export default function HowItWorks() {
                 (tab === "borrow" && (currentStep === "Creating a Vault" || currentStep === "Liquidation")) ||
                 (tab === "earn" && (currentStep === "Deposit JUSD" || currentStep === "Earn Returns"))
               ) && (
-                <>
-                  <ArrowButton
-                    direction="prev"
-                    disabled={current === 0 || isAnimating}
-                    onClick={() => handleAnimationChange('prev')}
-                  />
+                  <>
+                    <ArrowButton
+                      direction="prev"
+                      disabled={current === 0 || isAnimating}
+                      onClick={() => handleAnimationChange('prev')}
+                    />
 
-                  <ArrowButton
-                    direction="next"
-                    disabled={current >= timelines.length - 1 || isAnimating}
-                    onClick={() => handleAnimationChange('next')}
-                  />
-                </>
-              )}
+                    <ArrowButton
+                      direction="next"
+                      disabled={current >= timelines.length - 1 || isAnimating}
+                      onClick={() => handleAnimationChange('next')}
+                    />
+                  </>
+                )}
               <div
                 style={{
                   width: "500px",
@@ -252,6 +252,278 @@ export default function HowItWorks() {
             </div>
           </div>
         </div>
+        {tab === "borrow" ?
+          <>
+            <div className={styles.stabilityFund}>
+              <div className={styles.leftContent}>
+                <h5 className={styles.subHead}>What is</h5>
+                <h2 className={styles.mainHead}>Stability Fund</h2>
+              </div>
+              <div className={styles.rightContent}>
+                <p className={styles.description}>
+                  The Stability Fund provides uncorrelated returns that increase during market downturns. When StETH prices fall, more Lending Vaults become eligible for liquidation.  The Stability Fund purchases this collateral at a 10% discount to market value. This counter-cyclical approach helps protect against drawdowns and delivers higher returns during market stress.
+                </p>
+              </div>
+            </div>
+            <div className={styles.hiwSec}>
+              <div className={styles.leftSec}>
+                <h5 className={styles.innerHead}>How It Works</h5>
+                <ul className={styles.hiwList}>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>1.</span>
+                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>2.</span>
+                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>3.</span>
+                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>4.</span>
+                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>5.</span>
+                    <p className={styles.hiwItemDescription}>This 10% discount translates directly into depositor profits</p>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.rightSec}>
+                <h2 className={styles.innerHead}>Key Benefits</h2>
+                <div className={styles.benefitList}>
+                  <div className={styles.benefitItem}>
+                    <img src="/benefit-1.svg" alt="Benefit 1" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 01 )</span>
+                    <p className={styles.benefitDescription}>Truly uncorrelated returns with no historical drawdowns</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/benefit-2.svg" alt="Benefit 2" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 02 )</span>
+                    <p className={styles.benefitDescription}>Returns increase during market volatility and downturns</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/benefit-3.svg" alt="Benefit 3" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 03 )</span>
+                    <p className={styles.benefitDescription}>Seizes StETH at a 10% discount during liquidations</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/benefit-4.svg" alt="Benefit 4" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 04 )</span>
+                    <p className={styles.benefitDescription}>Automatic liquidation process requires no manual trading</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.performace}>
+              <div className={styles.performaceHead}>
+                <div className={styles.performanceHeadContent}>
+                  <h6 className={styles.supHead}>Performace Comparison</h6>
+                  <h2 className={styles.headStabilty}>Stability Fund vs. Traditional Assets</h2>
+                </div>
+                <div className={styles.rightSideContent}>
+                  <label className={styles.switchBtn}>
+                    <input type="checkbox" className={styles.inputRadio} />
+                    <span className={styles.sliderRounded}></span>
+                  </label>
+                  <span className={styles.cryptoText}>
+                    INCLUDE CRYPTO
+                  </span>
+                </div>
+              </div>
+              <div className={styles.dataSource}>
+                <span className={styles.spanText}>
+                  Data source:
+                </span>
+                <span className={styles.spanTextRight}>
+                  Based on MakerDAO historical liquidation data with assumptions about the percentage of DAI deposited into a Stability Fund equivalent. If more utility of JUSD becomes available, liquidation rewards from excess collateral could be distributed over a smaller percentage of minted JUSD, potentially resulting in higher returns than shown.
+                </span>
+              </div>
+              <div className={styles.chartBox}>
+
+              </div>
+              <div className={styles.dataSource}>
+                <span className={styles.spanText}>
+                  Note:
+                </span>
+                <span className={styles.spanTextRight}>
+                  Based on MakerDAO historical liquidation data with assumptions about the percentage of DAI deposited into a Stability Fund equivalent. If more utility of JUSD becomes available, liquidation rewards from excess collateral could be distributed over a smaller percentage of minted JUSD, potentially resulting in higher returns than shown.
+                </span>
+              </div>
+            </div>
+            <div className={styles.performace}>
+              <div className={styles.performaceHead}>
+                <div className={styles.performanceHeadContent}>
+                  <h6 className={styles.supHead}>Correlation to Other Assets</h6>
+                  <h2 className={styles.headStabilty}>Asset Correlation Matrix</h2>
+                  <p className={styles.stabilityDesc}>
+                    The Stability Fund shows near-zero or negative correlation with traditional assets and cryptocurrencies, making it an excellent portfolio diversifier that can reduce overall risk.
+                  </p>
+                </div>
+              </div>
+              <div className={styles.chartBox}>
+
+              </div>
+              <div className={styles.dataSource}>
+                <span className={`${styles.spanText} ${styles.highlightSpanTxt}`}>
+                  Stability Fund Benefits:
+                </span>
+                <span className={styles.spanTextRight}>
+                  With correlations close to zero or negative against most assets, the Stability Fund provides true diversification that helps reduce portfolio volatility.
+                </span>
+              </div>
+            </div>
+            <div className={styles.performace}>
+              <div className={styles.performaceHead}>
+                <div className={styles.performanceHeadContent}>
+                  <h6 className={styles.supHead}>Portfolio Optimization Benefits</h6>
+                  <h2 className={styles.headStabilty}>Portfolio Allocation Analysis</h2>
+                  <p className={styles.stabilityDesc}>
+                    This analysis demonstrates how including the Stability Fund in a portfolio improves risk-adjusted returns, maintaining the same volatility target while achieving higher returns.
+                  </p>
+                </div>
+              </div>
+              <div className={styles.chartBox}>
+
+              </div>
+            </div>
+            <div className={styles.performace}>
+              <div className={styles.performaceHead}>
+                <div className={styles.performanceHeadContent}>
+                  <h6 className={styles.supHead}>Portfolio Optimization Benefits</h6>
+                  <h2 className={styles.headStabilty}>Efficient Frontier Comparison</h2>
+                  <p className={styles.stabilityDesc}>
+                    The chart shows how adding the Stability Fund to a portfolio shifts the efficient frontier upward, enabling higher returns for the same level of risk. The green dashed line (With Stability Fund) achieves superior risk-adjusted returns compared to the red dashed line (No Stability Fund).
+                  </p>
+                </div>
+              </div>
+              <div className={styles.chartBox}>
+
+              </div>
+            </div>
+            <div className={`${styles.performace} ${styles.conclusionBox}`}>
+              <div className={styles.performaceHead}>
+                <div className={styles.performanceHeadContent}>
+                  <h6 className={styles.supHead}>Conclusion</h6>
+                  <h2 className={styles.headStabilty}>Key Takeaways</h2>
+                </div>
+              </div>
+              <ul className={styles.conclusion}>
+                <li className={styles.conclusionItem}>
+                  At 10% volatility, portfolios with the Stability Fund achieve ~30% higher returns (12.94% vs 9.88% unlevered)
+                </li>
+                <li className={styles.conclusionItem}>
+                  With leverage, including the Stability Fund can nearly double returns (18.24% vs 10.01%)
+                </li>
+                <li className={styles.conclusionItem}>
+                  The Stability Fund's unique properties enable optimizers to allocate significant portions to it (59.52% unlevered)
+                </li>
+                <li className={styles.conclusionItem}>
+                  Traditional portfolio optimization shows the Stability Fund's potential as a strategic portfolio component
+                </li>
+              </ul>
+            </div>
+          </>
+          :
+          <div className={styles.lendingVaultSection}>
+            <div className={styles.stabilityFund}>
+              <div className={styles.leftContent}>
+                <h5 className={styles.subHead}>What is</h5>
+                <h2 className={styles.mainHead}>Lending Vault</h2>
+              </div>
+              <div className={styles.rightContent}>
+                <p className={styles.description}>
+                  Lending Vaults allow you to access liquidity against your StETH holdings. The fixed interest rate is 0.5%, which won't change over time unlike variable rate protocols.  You continue earning staking rewards from Lido (currently ~2.8%) while borrowing. After accounting for the 0.5% borrow cost, this creates a positive carry of 2.3% on borrowed funds.
+                </p>
+              </div>
+            </div>
+            <div className={styles.hiwSec}>
+              <div className={styles.leftSec}>
+                <h5 className={styles.innerHead}>How It Works</h5>
+                <ul className={styles.hiwList}>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>1.</span>
+                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>2.</span>
+                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>3.</span>
+                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>4.</span>
+                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>5.</span>
+                    <p className={styles.hiwItemDescription}>This 10% discount translates directly into depositor profits</p>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.rightSec}>
+                <h2 className={styles.innerHead}>Terms</h2>
+                <div className={styles.benefitList}>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-1.svg" alt="term 1" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 01 )</span>
+                    <p className={styles.benefitDescription}>This 10% discount translates directly into depositor profits</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-2.svg" alt="term 2" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 02 )</span>
+                    <p className={styles.benefitDescription}>Rate remains fixed for the duration of the vault</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-3.svg" alt="term 3" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 03 )</span>
+                    <p className={styles.benefitDescription}>
+                      Continue earning StETH staking rewards (~2.8%) while borrowing
+                    </p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-4.svg" alt="term 4" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 04 )</span>
+                    <p className={styles.benefitDescription}>Effective positive carry of ~2.3% on borrowed funds</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.collatration}>
+                <h5 className={styles.innerHead}>Collateralization</h5>
+                <div className={styles.collatrationItemSec}>
+                  <div className={styles.collatrationItem}>
+                    <div className={styles.benefitCount}>
+                        ( 0 )
+                    </div>
+                    <div className={styles.collatrationDesc}>
+                      Initial minting requirement: 150% overcollateralization
+                    </div>
+                  </div>
+                   <div className={styles.collatrationItem}>
+                    <div className={styles.benefitCount}>
+                        ( 1 )
+                    </div>
+                    <div className={styles.collatrationDesc}>
+                      Liquidation threshold: Below 120% collateral value
+                    </div>
+                  </div>
+                   <div className={styles.collatrationItem}>
+                    <div className={styles.benefitCount}>
+                        ( 2 )
+                    </div>
+                    <div className={styles.collatrationDesc}>
+                      Liquidation penalty: 10% of repaid debt value
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        }
       </div>
     </div>
   );

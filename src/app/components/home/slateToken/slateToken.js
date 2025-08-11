@@ -6,22 +6,22 @@ import { useRef, useEffect } from "react";
 
 const tokenUtilityItems = [
 	{
-		icon: "/token-utility-1.svg",
+		icon: "/token_utility_1.svg",
 		title: "Governance",
 		desc: "Vote on protocol upgrades, parameter changes, and treasury allocations",
 	},
 	{
-		icon: "/token-utility-2.svg",
+		icon: "/token_utility_2.svg",
 		title: "Rewards",
 		desc: "Earn rewards for participating in governance and protocol activities",
 	},
 	{
-		icon: "/token-utility-3.svg",
+		icon: "/token_utility_3.svg",
 		title: "Passive Income",
 		desc: "Receive additional passive income for Stability Fund depositors",
 	},
 	{
-		icon: "/token-utility-4.svg",
+		icon: "/token_utility_4.svg",
 		title: "Incentives",
 		desc: "Incentivize behaviors that benefit the protocol ecosystem",
 	},
@@ -131,12 +131,12 @@ export default function SlateToken() {
                                 {tokenUtilityItems.map((item, idx) => (
                                     <div className={styles.tokenUtilityItem} key={idx}>
                                         <div className={styles.tokenUtilityIcon}>
-                                            {/* <Image
+                                            <Image
                                                 src={item.icon}
                                                 alt={item.title}
-                                                width={24}
-                                                height={24}
-                                                /> */}
+                                                width={64}
+                                                height={64}
+                                                />
                                         </div>
                                         <div className={styles.tokenUtilityContent}>
                                             <h6 className={styles.tokenUtilityContentTitle}>

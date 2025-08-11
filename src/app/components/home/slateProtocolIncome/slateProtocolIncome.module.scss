@@ -1,0 +1,63 @@
+.slateProtocolIncomeHeader {
+    text-align: center;
+    padding: 50px 0;
+    border: 1px dashed #BCBCBC;
+    border-top: none;
+    position: relative;
+    img {
+        margin-bottom: 10px;
+    }
+    &::before {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        left: -3px;
+        top: -3px;
+    }
+    &::after {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+    }
+}
+
+.incomeTxt {
+    font-family: var(--font-merriweather);
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -1.5px;
+}
+
+.slateProtocolIncomeWrap {
+    position: relative;
+    border: 1px dashed #BCBCBC;
+    border-top: none;
+    &::before {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        left: -3px;
+        top: -3px;
+    }
+    &::after {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+    }
+}
