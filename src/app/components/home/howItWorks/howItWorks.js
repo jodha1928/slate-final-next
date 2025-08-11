@@ -85,17 +85,43 @@ export default function HowItWorks() {
 
   const [current, setCurrent] = useState(0);
 
-  const riveProps = useMemo(() => {
-    return {
-      src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
-      artboard: timelines[current]?.artboard,
-      animations: timelines[current]?.animation,
-      autoplay: true,
-      shouldDisableRiveListeners: true,
-    };
-  }, [tab, timelines, current]);
+  // const riveProps = useMemo(() => {
+  //   return {
+  //     src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
+  //     artboard: timelines[current]?.artboard,
+  //     animations: timelines[current]?.animation,
+  //     autoplay: true,
+  //     shouldDisableRiveListeners: true,
+  //   };
+  // }, [tab, timelines, current]);
 
-  const { RiveComponent, rive } = useRive(riveProps);
+  // const { rive, RiveComponent } = useRive(riveProps);
+
+  const { rive, RiveComponent } = useRive({
+   src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
+  artboard: timelines[0].artboard,
+  animations: timelines[0].animation,
+  autoplay: true,
+  shouldDisableRiveListeners: true,
+});
+
+useEffect(() => {
+  if (!rive) return;
+
+  const { artboard, animation } = timelines[current] || {};
+  
+  // If artboard is different, reload it
+  if (rive.artboard?.name !== artboard) {
+    rive.load({
+      artboard,
+      animations: animation,
+      autoplay: true,
+    });
+  } else {
+    // Same artboard → just play new animation
+    rive.play(animation);
+  }
+}, [current, timelines, rive]);
 
   // Handle animation transitions smoothly
   const handleAnimationChange = useCallback((direction) => {
@@ -244,9 +270,7 @@ export default function HowItWorks() {
                 }}
               >
                 {timelines[current] && (
-                  <RiveComponent
-                    key={`${tab}-${currentStep}-${current}-${activeInnerButtonMap.borrow}`}
-                  />
+                  <RiveComponent />
                 )}
               </div>
             </div>
