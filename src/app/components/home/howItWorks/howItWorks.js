@@ -183,7 +183,7 @@ useEffect(() => {
   ), []);
 
   return (
-    <div className={styles.howItWorks}>
+    <div className={styles.howItWorks} id="hiw">
       <div className={`${styles.howItWorksWrapper} container`}>
         <h2 className={styles.mainHead}>How Slate Protocol Works</h2>
 
@@ -277,7 +277,7 @@ useEffect(() => {
           </div>
         </div>
         {tab === "borrow" ?
-          <>
+          <div id="stabilityfund">
             <div className={styles.stabilityFund}>
               <div className={styles.leftContent}>
                 <h5 className={styles.subHead}>What is</h5>
@@ -449,7 +449,7 @@ useEffect(() => {
                 </li>
               </ul>
             </div>
-          </>
+          </div>
           :
           <div className={styles.lendingVaultSection}>
             <div className={styles.stabilityFund}>
