@@ -418,10 +418,10 @@ export default function HowItWorks() {
                   With leverage, including the Stability Fund can nearly double returns (18.24% vs 10.01%)
                 </li>
                 <li className={styles.conclusionItem}>
-                  The Stability Fund's unique properties enable optimizers to allocate significant portions to it (59.52% unlevered)
+                  The Stability Funds unique properties enable optimizers to allocate significant portions to it (59.52% unlevered)
                 </li>
                 <li className={styles.conclusionItem}>
-                  Traditional portfolio optimization shows the Stability Fund's potential as a strategic portfolio component
+                  Traditional portfolio optimization shows the Stability Funds potential as a strategic portfolio component
                 </li>
               </ul>
             </div>
@@ -435,7 +435,7 @@ export default function HowItWorks() {
               </div>
               <div className={styles.rightContent}>
                 <p className={styles.description}>
-                  Lending Vaults allow you to access liquidity against your StETH holdings. The fixed interest rate is 0.5%, which won't change over time unlike variable rate protocols.  You continue earning staking rewards from Lido (currently ~2.8%) while borrowing. After accounting for the 0.5% borrow cost, this creates a positive carry of 2.3% on borrowed funds.
+                  Lending Vaults allow you to access liquidity against your StETH holdings. The fixed interest rate is 0.5%, which wont change over time unlike variable rate protocols.  You continue earning staking rewards from Lido (currently ~2.8%) while borrowing. After accounting for the 0.5% borrow cost, this creates a positive carry of 2.3% on borrowed funds.
                 </p>
               </div>
             </div>
