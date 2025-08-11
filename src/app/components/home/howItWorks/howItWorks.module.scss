@@ -218,10 +218,17 @@
     .leftSec,
     .rightSec {
         width: 50%;
+        @media only screen and (max-width: 767px) {
+            width: 100%;
+        }
     }
     .rightSec {
         border-left: 1px dashed #BCBCBC;
         padding-left: 30px;
+        @media only screen and (max-width: 767px) {
+            border: none;
+            padding: 20px 0 0;
+        }
     }
     .leftSec {
         padding-right: 30px;
@@ -234,6 +241,9 @@
         font-weight: 400;
         opacity: 0.8;
         margin-bottom: 35px;
+        @media only screen and (max-width: 767px) {
+            margin-bottom: 25px;
+        }
     }
     .hiwItem {
         display: flex;
@@ -258,6 +268,10 @@
         color: #272727;
         font-weight: 400;
     }
+    @media only screen and (max-width: 767px) {
+        display: block;
+        padding: 40px 15px;
+    }
 }
 
 .collatration {
@@ -279,12 +293,18 @@
 .benefitList {
     display: flex;
     flex-wrap: wrap;
+    @media only screen and (max-width: 767px) {
+        gap: 20px;
+    }
 }
 
 .benefitItem {
     width: calc(50% - 8px);
     text-align: left;
     margin-bottom: 40px;
+    @media only screen and (max-width: 767px) {
+        width: calc(50% - 20px);
+    }
 }
 
 .stabilityFund {
@@ -310,6 +330,9 @@
     .rightContent {
         flex: 1;
         padding-left: 40px;
+        @media only screen and (max-width: 767px) {
+            padding-left: 0;
+        }
     }
     .description {
         color: #747474;
@@ -317,6 +340,10 @@
         line-height: 126%;
         letter-spacing: -0.36px;
         font-weight: 400;
+    }
+    @media only screen and (max-width: 767px) {
+        display: block;
+        padding: 40px 15px;
     }
 }
 
@@ -331,6 +358,9 @@
         color: #A96E00;
         display: block;
         margin-bottom: 15px;
+    }
+    @media only screen and (max-width: 767px) {
+        padding: 40px 15px;
     }
 }
 
@@ -451,6 +481,9 @@
     font-weight: 600;
     margin-top: 20px;
     padding-left: 15px;
+    @media only screen and (max-width: 767px) {
+        padding-left: 0;
+    }
 }
 
 .spanTextRight {
