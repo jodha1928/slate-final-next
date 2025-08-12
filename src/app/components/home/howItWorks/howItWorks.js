@@ -98,30 +98,31 @@ export default function HowItWorks() {
   // const { rive, RiveComponent } = useRive(riveProps);
 
   const { rive, RiveComponent } = useRive({
-   src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
-  artboard: timelines[0].artboard,
-  animations: timelines[0].animation,
-  autoplay: true,
-  shouldDisableRiveListeners: true,
-});
+    src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
+    artboard: timelines[0].artboard,
+    animations: timelines[0].animation,
+    autoplay: true,
+    shouldDisableRiveListeners: true,
+  });
 
-useEffect(() => {
-  if (!rive) return;
+  useEffect(() => {
+    if (!rive) return;
 
-  const { artboard, animation } = timelines[current] || {};
-  
-  // If artboard is different, reload it
-  if (rive.artboard?.name !== artboard) {
-    rive.load({
-      artboard,
-      animations: animation,
-      autoplay: true,
-    });
-  } else {
-    // Same artboard → just play new animation
-    rive.play(animation);
-  }
-}, [current, timelines, rive]);
+    const { artboard, animation } = timelines[current] || {};
+
+    // If artboard is different, reload it
+    if (rive.artboard?.name !== artboard) {
+      rive.load({
+        src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
+        artboard,
+        animations: animation,
+        autoplay: true,
+      });
+    } else {
+      // Same artboard → just play new animation
+      rive.play(animation);
+    }
+  }, [current, timelines, rive]);
 
   // Handle animation transitions smoothly
   const handleAnimationChange = useCallback((direction) => {
@@ -518,33 +519,33 @@ useEffect(() => {
               </div>
             </div>
             <div className={styles.collatration}>
-                <h5 className={styles.innerHead}>Collateralization</h5>
-                <div className={styles.collatrationItemSec}>
-                  <div className={styles.collatrationItem}>
-                    <div className={styles.benefitCount}>
-                        ( 0 )
-                    </div>
-                    <div className={styles.collatrationDesc}>
-                      Initial minting requirement: 150% overcollateralization
-                    </div>
+              <h5 className={styles.innerHead}>Collateralization</h5>
+              <div className={styles.collatrationItemSec}>
+                <div className={styles.collatrationItem}>
+                  <div className={styles.benefitCount}>
+                    ( 0 )
                   </div>
-                   <div className={styles.collatrationItem}>
-                    <div className={styles.benefitCount}>
-                        ( 1 )
-                    </div>
-                    <div className={styles.collatrationDesc}>
-                      Liquidation threshold: Below 120% collateral value
-                    </div>
-                  </div>
-                   <div className={styles.collatrationItem}>
-                    <div className={styles.benefitCount}>
-                        ( 2 )
-                    </div>
-                    <div className={styles.collatrationDesc}>
-                      Liquidation penalty: 10% of repaid debt value
-                    </div>
+                  <div className={styles.collatrationDesc}>
+                    Initial minting requirement: 150% overcollateralization
                   </div>
                 </div>
+                <div className={styles.collatrationItem}>
+                  <div className={styles.benefitCount}>
+                    ( 1 )
+                  </div>
+                  <div className={styles.collatrationDesc}>
+                    Liquidation threshold: Below 120% collateral value
+                  </div>
+                </div>
+                <div className={styles.collatrationItem}>
+                  <div className={styles.benefitCount}>
+                    ( 2 )
+                  </div>
+                  <div className={styles.collatrationDesc}>
+                    Liquidation penalty: 10% of repaid debt value
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         }
