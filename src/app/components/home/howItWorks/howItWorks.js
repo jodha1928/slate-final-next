@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./howItWorks.module.scss";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useRive } from "@rive-app/react-canvas";
 
 export default function HowItWorks() {
@@ -10,6 +10,7 @@ export default function HowItWorks() {
   const [activeInnerButtonMap, setActiveInnerButtonMap] = useState({ borrow: 0 });
   const [isMobile, setIsMobile] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const riveContainerRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -106,6 +107,25 @@ export default function HowItWorks() {
   });
 
   useEffect(() => {
+  if (!rive || !riveContainerRef.current) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        rive.play(timelines[current]?.animation);
+      } else {
+        rive.pause();
+      }
+    },
+    { threshold: 0.25 } // 25% visible before playing
+  );
+
+  observer.observe(riveContainerRef.current);
+
+  return () => observer.disconnect();
+}, [rive, timelines, current]);
+
+  useEffect(() => {
     if (!rive) return;
 
     const { artboard, animation } = timelines[current] || {};
@@ -158,11 +178,15 @@ export default function HowItWorks() {
     setCurrent(0);
   }, [tab, activeStep]);
 
-  useEffect(() => {
-    if (tab !== "borrow") {
-      setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
-    }
-  }, [tab]);
+ useEffect(() => {
+  if (tab === "borrow") {
+    setActiveStep(0);
+    setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
+  } else if (tab === "earn") {
+    setActiveStep(0); // "Deposit JUSD"
+  }
+  setCurrent(0); // also reset animation index
+}, [tab]);
 
   const ArrowButton = useCallback(({ direction, disabled, onClick }) => (
     <div
@@ -213,7 +237,10 @@ export default function HowItWorks() {
               <div key={idx} className={styles.stepBox}>
                 <h2
                   className={`${styles.stepTitle} ${activeStep === idx ? styles.activeStep : ""}`}
-                  onClick={() => setActiveStep(idx)}
+                  onClick={() => {
+                    setActiveStep(idx);
+                    setCurrent(0);
+                  }}
                 >
                   {step.title}
                   <span className={styles.stepNumber}>({step.number})</span>
@@ -261,6 +288,7 @@ export default function HowItWorks() {
                   </>
                 )}
               <div
+              ref={riveContainerRef}
                 style={{
                   width: "500px",
                   height: "500px",
