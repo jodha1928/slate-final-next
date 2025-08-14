@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useRive } from "@rive-app/react-canvas";
 import CorrelationMatrix from "../../chart/CorrelationMatrix";
 import OptimalAllocationTable from "../../chart/OptimalAllocationTable";
+import FrontiersCalChart from "../../chart/Frontier chart";
 
 export default function HowItWorks() {
   const [tab, setTab] = useState("borrow");
@@ -441,7 +442,7 @@ export default function HowItWorks() {
                 </div>
               </div>
               <div className={styles.chartBox}>
-
+                <FrontiersCalChart />
               </div>
             </div>
             <div className={`${styles.performace} ${styles.conclusionBox}`}>
