@@ -5,7 +5,6 @@
     position: sticky;
     top: 0;
     left: 0;
-    background-color: #fff;
     z-index: 99;
     @media only screen and (max-width: 767px) {
         margin: 0;
@@ -74,6 +73,7 @@
     .nav {
         border: 1px dashed #bcbcbc;
         padding: 15px 0;
+        background-color: #fff;
     }
 }
 

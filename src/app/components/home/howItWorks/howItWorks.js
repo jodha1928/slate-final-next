@@ -215,75 +215,77 @@ export default function HowItWorks() {
 
         {/* Step + Video Section */}
         <div className={styles.contentRow}>
-          <div className={styles.leftCol}>
-            {steps.map((step, idx) => (
-              <div key={idx} className={styles.stepBox}>
-                <h2
-                  className={`${styles.stepTitle} ${activeStep === idx ? styles.activeStep : ""}`}
-                  onClick={() => {
-                    setActiveStep(idx);
-                    setCurrent(0);
+          <div className={styles.innerContentRow}>
+            <div className={styles.leftCol}>
+              {steps.map((step, idx) => (
+                <div key={idx} className={styles.stepBox}>
+                  <h2
+                    className={`${styles.stepTitle} ${activeStep === idx ? styles.activeStep : ""}`}
+                    onClick={() => {
+                      setActiveStep(idx);
+                      setCurrent(0);
+                    }}
+                  >
+                    {step.title}
+                    <span className={styles.stepNumber}>({step.number})</span>
+                  </h2>
+
+                  {tab === "borrow" && step.title === "Managing a Vault" && activeStep === idx && (
+                    <div className={styles.innerButtons}>
+                      {["Withdraw JUSD", "Withdraw Collateral", "Repay JUSD", "Add Collateral"].map((label, i) => (
+                        <button
+                          key={label}
+                          className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
+                          onClick={() => {
+                            setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
+                            setCurrent(0);
+                          }}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Right Column - Video & Arrows */}
+            <div className={styles.rightCol}>
+              <div className={styles.illustration}>
+                {(
+                  (tab === "borrow" && (currentStep === "Creating a Vault" || currentStep === "Liquidation")) ||
+                  (tab === "earn" && (currentStep === "Deposit JUSD" || currentStep === "Earn Returns"))
+                ) && (
+                    <>
+                      <ArrowButton
+                        direction="prev"
+                        disabled={current === 0 || isAnimating}
+                        onClick={() => handleAnimationChange('prev')}
+                      />
+
+                      <ArrowButton
+                        direction="next"
+                        disabled={current >= timelines.length - 1 || isAnimating}
+                        onClick={() => handleAnimationChange('next')}
+                      />
+                    </>
+                  )}
+                <div
+                ref={riveContainerRef}
+                  style={{
+                    width: "100%",
+                    height: isMobile ? "450px" : "650px",
+                    maxWidth: "1200px",
+                    margin: "0 auto",
+                    opacity: isAnimating ? 0.7 : 1,
+                    transition: 'opacity 0.1s ease',
                   }}
                 >
-                  {step.title}
-                  <span className={styles.stepNumber}>({step.number})</span>
-                </h2>
-
-                {tab === "borrow" && step.title === "Managing a Vault" && activeStep === idx && (
-                  <div className={styles.innerButtons}>
-                    {["Withdraw JUSD", "Withdraw Collateral", "Repay JUSD", "Add Collateral"].map((label, i) => (
-                      <button
-                        key={label}
-                        className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
-                        onClick={() => {
-                          setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
-                          setCurrent(0);
-                        }}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Right Column - Video & Arrows */}
-          <div className={styles.rightCol}>
-            <div className={styles.illustration}>
-              {(
-                (tab === "borrow" && (currentStep === "Creating a Vault" || currentStep === "Liquidation")) ||
-                (tab === "earn" && (currentStep === "Deposit JUSD" || currentStep === "Earn Returns"))
-              ) && (
-                  <>
-                    <ArrowButton
-                      direction="prev"
-                      disabled={current === 0 || isAnimating}
-                      onClick={() => handleAnimationChange('prev')}
-                    />
-
-                    <ArrowButton
-                      direction="next"
-                      disabled={current >= timelines.length - 1 || isAnimating}
-                      onClick={() => handleAnimationChange('next')}
-                    />
-                  </>
-                )}
-              <div
-              ref={riveContainerRef}
-                style={{
-                  width: "100%",
-                  height: isMobile ? "450px" : "650px",
-                  maxWidth: "1200px",
-                  margin: "0 auto",
-                  opacity: isAnimating ? 0.7 : 1,
-                  transition: 'opacity 0.1s ease',
-                }}
-              >
-                {timelines[current] && (
-                  <RiveComponent />
-                )}
+                  {timelines[current] && (
+                    <RiveComponent />
+                  )}
+                </div>
               </div>
             </div>
           </div>
