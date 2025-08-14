@@ -3,6 +3,8 @@
 import styles from "./howItWorks.module.scss";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useRive } from "@rive-app/react-canvas";
+import CorrelationMatrix from "../../chart/CorrelationMatrix";
+import OptimalAllocationTable from "../../chart/OptimalAllocationTable";
 
 export default function HowItWorks() {
   const [tab, setTab] = useState("borrow");
@@ -403,7 +405,7 @@ export default function HowItWorks() {
                 </div>
               </div>
               <div className={styles.chartBox}>
-
+              <CorrelationMatrix />
               </div>
               <div className={styles.dataSource}>
                 <span className={`${styles.spanText} ${styles.highlightSpanTxt}`}>
@@ -425,7 +427,7 @@ export default function HowItWorks() {
                 </div>
               </div>
               <div className={styles.chartBox}>
-
+                <OptimalAllocationTable />
               </div>
             </div>
             <div className={styles.performace}>
