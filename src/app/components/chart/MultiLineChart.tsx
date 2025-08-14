@@ -26,14 +26,14 @@ export default function MultiLineChart() {
   ];
 
   return (
-    <div style={{ width: "100%", height: 500, background: "#0d1b2a", padding: "1rem", borderRadius: "12px" }}>
+    <div style={{ width: "100%", height: 500, background: "#fff", padding: "1rem", borderRadius: "12px" }}>
       <ResponsiveContainer>
         <LineChart data={data}>
-          <CartesianGrid stroke="#1b263b" strokeDasharray="3 3" />
-          <XAxis dataKey="date" stroke="#fff" />
-          <YAxis stroke="#fff" tickFormatter={(val) => `$${val / 1000}k`} />
-          <Tooltip contentStyle={{ background: "#1b263b", border: "none" }} labelStyle={{ color: "#fff" }} />
-          <Legend wrapperStyle={{ color: "#fff" }} />
+          <CartesianGrid stroke="#fff" strokeDasharray="3 3" />
+          <XAxis dataKey="date" stroke="#1b263b" />
+          <YAxis stroke="#1b263b" tickFormatter={(val) => `$${val / 1000}k`} />
+          <Tooltip contentStyle={{ background: "#fff", border: "none" }} labelStyle={{ color: "#1b263b" }} />
+          <Legend wrapperStyle={{ color: "#1b263b" }} />
           
           <Line type="monotone" dataKey="stability" stroke="#2ec4b6" name="Stability Fund" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="sp500" stroke="#3a86ff" name="S&P 500" strokeWidth={2} dot={false} />
