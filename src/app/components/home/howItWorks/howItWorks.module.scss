@@ -129,6 +129,10 @@
 
 .chartBox {
     padding-top: 30px;
+    @media only screen and (max-width: 767px) {
+        max-width: 100%;
+        overflow-x: auto;
+    }
 }
 
 .innerContentRow {
@@ -136,6 +140,9 @@
     width: 100%;
     margin: 0 auto;
     display: flex;
+    @media only screen and (max-width: 767px) {
+        flex-direction: column-reverse;
+    }
 }
 
 .rightCol {

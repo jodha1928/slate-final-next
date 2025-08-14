@@ -1,0 +1,44 @@
+.footer {
+    border-top: 1px dashed #BCBCBC;
+    text-align: center;
+}
+
+.footerWrapper {
+    position: relative;
+    padding: 50px 0;
+    &::before {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        left: -3px;
+        top: -3px;
+    }
+    &::after {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+    }
+}
+
+.footerMenu {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.allRights {
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 400;
+    color: #1D1D1D;
+    padding-top: 15px;
+    opacity: 0.8;
+}

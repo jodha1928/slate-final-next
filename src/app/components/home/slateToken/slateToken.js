@@ -95,7 +95,7 @@ const tokenDistributionItems = [
 
 export default function SlateToken() {
 	return (
-		<div className={styles.slateToken}>
+		<div className={styles.slateToken} id="slateTocken">
 			<div className={`${styles.slateTokenWrapper} container`}>
 				<div className={styles.slateTokenContent}>
 					<Image

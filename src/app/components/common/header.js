@@ -15,7 +15,7 @@ export default function Header() {
   ];
 
   const navLinksRight = [
-    { href: "#", label: "Tokenomics" },
+    { href: "#slateTocken", label: "Tokenomics" },
     { href: "#contact", label: "Contact us" },
   ];
 

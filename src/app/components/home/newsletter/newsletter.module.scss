@@ -1,0 +1,81 @@
+.newsletter {
+    border-top: 1px dashed #BCBCBC;
+}
+
+.newsletterWrap {
+    text-align: center;
+    padding: 50px 0;
+    position: relative;
+    border: 1px dashed #BCBCBC;
+    border-top: none;
+    border-bottom: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &::before {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        left: -3px;
+        top: -3px;
+    }
+    &::after {
+        content: "";
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #BCBCBC;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+    }
+    @media only screen and (max-width: 767px) {
+        padding: 30px 15px;
+    }
+}
+
+.mainHead {
+    font-family: var(--font-merriweather);
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -1.5px;
+    margin-bottom: 30px;
+}
+
+.email {
+    min-height: 42px;
+    background-color: rgba(10, 10, 10, 0.1);
+    border: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0 15px;
+    width: 390px;
+    max-width: 100%;
+    margin-bottom: 15px;
+    &::placeholder {
+        color: #0A0A0A;
+    }
+}
+
+.btn {
+    padding: 0 15px;
+    width: 390px;
+    max-width: 100%;
+    min-height: 42px;
+    background-color: #0A0A0A;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.imgSec {
+    margin-top: -20px;
+    position: relative;
+    z-index: -1;
+}
