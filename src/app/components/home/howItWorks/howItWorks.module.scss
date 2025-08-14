@@ -35,7 +35,7 @@
 
 .illustration {
     position: relative;
-    padding: 0 40px;
+    padding: 0 40px 40px;
     @media only screen and (max-width: 768px) {
         padding: 0 15px;
     }
@@ -238,6 +238,9 @@
     }
     .leftSec {
         padding-right: 30px;
+        @media only screen and (max-width: 767px) {
+            padding-right: 0;
+        }
     }
     .innerHead {
         font-size: 24px;
