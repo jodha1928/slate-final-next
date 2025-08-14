@@ -86,18 +86,6 @@ export default function HowItWorks() {
 
   const [current, setCurrent] = useState(0);
 
-  // const riveProps = useMemo(() => {
-  //   return {
-  //     src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
-  //     artboard: timelines[current]?.artboard,
-  //     animations: timelines[current]?.animation,
-  //     autoplay: true,
-  //     shouldDisableRiveListeners: true,
-  //   };
-  // }, [tab, timelines, current]);
-
-  // const { rive, RiveComponent } = useRive(riveProps);
-
   const { rive, RiveComponent } = useRive({
     src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
     artboard: timelines[0].artboard,
@@ -125,24 +113,20 @@ export default function HowItWorks() {
   return () => observer.disconnect();
 }, [rive, timelines, current]);
 
-  useEffect(() => {
-    if (!rive) return;
+ useEffect(() => {
+  if (!rive) return;
 
-    const { artboard, animation } = timelines[current] || {};
+  const { artboard, animation } = timelines[current] || {};
+  if (!artboard || !animation) return;
 
-    // If artboard is different, reload it
-    if (rive.artboard?.name !== artboard) {
-      rive.load({
-        src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
-        artboard,
-        animations: animation,
-        autoplay: true,
-      });
-    } else {
-      // Same artboard → just play new animation
-      rive.play(animation);
-    }
-  }, [current, timelines, rive]);
+  // Always reload the artboard fresh
+  rive.load({
+    src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
+    artboard,
+    animations: animation,
+    autoplay: true,
+  });
+}, [current, timelines, rive]);
 
   // Handle animation transitions smoothly
   const handleAnimationChange = useCallback((direction) => {
