@@ -1,15 +1,16 @@
 .howItWorks {
     border-top: 1px dashed #BCBCBC;
     border-bottom: 1px dashed #BCBCBC;
+    padding-top: 40px;
     @media screen and (max-width: 768px) {
-        padding: 0 15px;
+        padding: 20px 15px 0;
     }
 }
 
 .howItWorksWrapper {
     border-left: 1px dashed #BCBCBC;
     border-right: 1px dashed #BCBCBC;
-    padding: 100px 50px;
+    padding: 0 50px 100px;
     @media only screen and (max-width: 991px) {
         padding: 50px 20px;
     }
@@ -117,8 +118,13 @@
 
 .contentRow {
     display: flex;
+    border-bottom: 1px dashed #BCBCBC;
+    padding: 40px 40px 0;
+    max-width: 1600px;
+    margin: 0 auto;
     @media only screen and (max-width: 768px) {
         flex-direction: column-reverse;
+        padding: 0;
     }
 }
 
@@ -308,9 +314,7 @@
 }
 
 .stabilityFund {
-    border-top: 1px dashed #BCBCBC;
     display: flex;
-    margin-top: 40px;
     padding: 55px 0;
     .mainHead {
         text-align: left;

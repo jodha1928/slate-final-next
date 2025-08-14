@@ -193,8 +193,7 @@ export default function HowItWorks() {
 
   return (
     <div className={styles.howItWorks} id="hiw">
-      <div className={`${styles.howItWorksWrapper} container`}>
-        <h2 className={styles.mainHead}>How Slate Protocol Works</h2>
+      <h2 className={styles.mainHead}>How Slate Protocol Works</h2>
 
         {/* Tab Switcher */}
         <div className={styles.tabSwitcherBox}>
@@ -274,9 +273,9 @@ export default function HowItWorks() {
               <div
               ref={riveContainerRef}
                 style={{
-                  width: "500px",
-                  height: "500px",
-                  maxWidth: "100%",
+                  width: "100%",
+                  height: isMobile ? "450px" : "650px",
+                  maxWidth: "1200px",
                   margin: "0 auto",
                   opacity: isAnimating ? 0.7 : 1,
                   transition: 'opacity 0.1s ease',
@@ -289,6 +288,7 @@ export default function HowItWorks() {
             </div>
           </div>
         </div>
+      <div className={`${styles.howItWorksWrapper} container`}>
         {tab === "borrow" ?
           <div id="stabilityfund">
             <div className={styles.stabilityFund}>

@@ -5,7 +5,7 @@
     position: sticky;
     top: 0;
     left: 0;
-    background-color: rgba($color: #fff, $alpha: 0.8);
+    background-color: #fff;
     z-index: 99;
 }
 
@@ -66,6 +66,13 @@
     display: none;
 }
 
+@media only screen and (min-width: 768px) {
+    .nav {
+        border: 1px dashed #bcbcbc;
+        padding: 15px 0;
+    }
+}
+
 @media (max-width: 768px) {
     .nav {
         position: fixed;
@@ -92,5 +99,8 @@
             cursor: pointer;
             display: block;
         }
+    }
+    .logoItem {
+        display: none;
     }
 }
