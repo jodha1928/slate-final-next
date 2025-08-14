@@ -6,6 +6,7 @@ import { useRive } from "@rive-app/react-canvas";
 import CorrelationMatrix from "../../chart/CorrelationMatrix";
 import OptimalAllocationTable from "../../chart/OptimalAllocationTable";
 import FrontiersCalChart from "../../chart/Frontier chart";
+import MultiLineChart from "../../chart/MultiLineChart";
 
 export default function HowItWorks() {
   const [tab, setTab] = useState("borrow");
@@ -481,7 +482,7 @@ export default function HowItWorks() {
                 </span>
               </div>
               <div className={styles.chartBox}>
-
+                <MultiLineChart />
               </div>
               <div className={styles.dataSource}>
                 <span className={styles.spanText}>

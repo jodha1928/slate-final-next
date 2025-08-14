@@ -13,8 +13,20 @@ export default function SlateProtocolIncome() {
 
   const [current, setCurrent] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const sectionRef = useRef(null);
   const wasVisibleRef = useRef(false);
+
+   useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      checkMobile(); // initial run
+      window.addEventListener("resize", checkMobile);
+  
+      return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
   // Observe section visibility
   useEffect(() => {
@@ -83,7 +95,7 @@ export default function SlateProtocolIncome() {
         <div
           style={{
             width: "600px",
-            height: "600px",
+            height: isMobile ? "320px" : "600px",
             maxWidth: "100%",
             margin: "0 auto",
           }}
