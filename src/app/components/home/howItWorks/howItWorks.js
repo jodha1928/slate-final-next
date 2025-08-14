@@ -295,7 +295,104 @@ export default function HowItWorks() {
         </div>
       <div className={`${styles.howItWorksWrapper} container`}>
         {tab === "borrow" ?
-          <div id="stabilityfund">
+          <div className={styles.lendingVaultSection} id="lanidngVault">
+            <div className={styles.stabilityFund}>
+              <div className={styles.leftContent}>
+                <h5 className={styles.subHead}>What is</h5>
+                <h2 className={styles.mainHead}>Lending Vault</h2>
+              </div>
+              <div className={styles.rightContent}>
+                <p className={styles.description}>
+                  Lending Vaults allow you to access liquidity against your StETH holdings. The fixed interest rate is 0.5%, which wont change over time unlike variable rate protocols.  You continue earning staking rewards from Lido (currently ~2.8%) while borrowing. After accounting for the 0.5% borrow cost, this creates a positive carry of 2.3% on borrowed funds.
+                </p>
+              </div>
+            </div>
+            <div className={styles.hiwSec}>
+              <div className={styles.leftSec}>
+                <h5 className={styles.innerHead}>How It Works</h5>
+                <ul className={styles.hiwList}>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>1.</span>
+                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>2.</span>
+                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>3.</span>
+                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>4.</span>
+                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                  </li>
+                  <li className={styles.hiwItem}>
+                    <span className={styles.hiwItemNumber}>5.</span>
+                    <p className={styles.hiwItemDescription}>This 10% discount translates directly into depositor profits</p>
+                  </li>
+                </ul>
+              </div>
+              <div className={styles.rightSec}>
+                <h2 className={styles.innerHead}>Terms</h2>
+                <div className={styles.benefitList}>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-1.svg" alt="term 1" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 01 )</span>
+                    <p className={styles.benefitDescription}>This 10% discount translates directly into depositor profits</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-2.svg" alt="term 2" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 02 )</span>
+                    <p className={styles.benefitDescription}>Rate remains fixed for the duration of the vault</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-3.svg" alt="term 3" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 03 )</span>
+                    <p className={styles.benefitDescription}>
+                      Continue earning StETH staking rewards (~2.8%) while borrowing
+                    </p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-4.svg" alt="term 4" className={styles.benefitImage} />
+                    <span className={styles.benefitCount}>( 04 )</span>
+                    <p className={styles.benefitDescription}>Effective positive carry of ~2.3% on borrowed funds</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.collatration}>
+              <h5 className={styles.innerHead}>Collateralization</h5>
+              <div className={styles.collatrationItemSec}>
+                <div className={styles.collatrationItem}>
+                  <div className={styles.benefitCount}>
+                    ( 0 )
+                  </div>
+                  <div className={styles.collatrationDesc}>
+                    Initial minting requirement: 150% overcollateralization
+                  </div>
+                </div>
+                <div className={styles.collatrationItem}>
+                  <div className={styles.benefitCount}>
+                    ( 1 )
+                  </div>
+                  <div className={styles.collatrationDesc}>
+                    Liquidation threshold: Below 120% collateral value
+                  </div>
+                </div>
+                <div className={styles.collatrationItem}>
+                  <div className={styles.benefitCount}>
+                    ( 2 )
+                  </div>
+                  <div className={styles.collatrationDesc}>
+                    Liquidation penalty: 10% of repaid debt value
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          :
+           <div id="stabilityfund">
             <div className={styles.stabilityFund}>
               <div className={styles.leftContent}>
                 <h5 className={styles.subHead}>What is</h5>
@@ -466,103 +563,6 @@ export default function HowItWorks() {
                   Traditional portfolio optimization shows the Stability Funds potential as a strategic portfolio component
                 </li>
               </ul>
-            </div>
-          </div>
-          :
-          <div className={styles.lendingVaultSection}>
-            <div className={styles.stabilityFund}>
-              <div className={styles.leftContent}>
-                <h5 className={styles.subHead}>What is</h5>
-                <h2 className={styles.mainHead}>Lending Vault</h2>
-              </div>
-              <div className={styles.rightContent}>
-                <p className={styles.description}>
-                  Lending Vaults allow you to access liquidity against your StETH holdings. The fixed interest rate is 0.5%, which wont change over time unlike variable rate protocols.  You continue earning staking rewards from Lido (currently ~2.8%) while borrowing. After accounting for the 0.5% borrow cost, this creates a positive carry of 2.3% on borrowed funds.
-                </p>
-              </div>
-            </div>
-            <div className={styles.hiwSec}>
-              <div className={styles.leftSec}>
-                <h5 className={styles.innerHead}>How It Works</h5>
-                <ul className={styles.hiwList}>
-                  <li className={styles.hiwItem}>
-                    <span className={styles.hiwItemNumber}>1.</span>
-                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-                  </li>
-                  <li className={styles.hiwItem}>
-                    <span className={styles.hiwItemNumber}>2.</span>
-                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
-                  </li>
-                  <li className={styles.hiwItem}>
-                    <span className={styles.hiwItemNumber}>3.</span>
-                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
-                  </li>
-                  <li className={styles.hiwItem}>
-                    <span className={styles.hiwItemNumber}>4.</span>
-                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
-                  </li>
-                  <li className={styles.hiwItem}>
-                    <span className={styles.hiwItemNumber}>5.</span>
-                    <p className={styles.hiwItemDescription}>This 10% discount translates directly into depositor profits</p>
-                  </li>
-                </ul>
-              </div>
-              <div className={styles.rightSec}>
-                <h2 className={styles.innerHead}>Terms</h2>
-                <div className={styles.benefitList}>
-                  <div className={styles.benefitItem}>
-                    <img src="/term-1.svg" alt="term 1" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 01 )</span>
-                    <p className={styles.benefitDescription}>This 10% discount translates directly into depositor profits</p>
-                  </div>
-                  <div className={styles.benefitItem}>
-                    <img src="/term-2.svg" alt="term 2" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 02 )</span>
-                    <p className={styles.benefitDescription}>Rate remains fixed for the duration of the vault</p>
-                  </div>
-                  <div className={styles.benefitItem}>
-                    <img src="/term-3.svg" alt="term 3" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 03 )</span>
-                    <p className={styles.benefitDescription}>
-                      Continue earning StETH staking rewards (~2.8%) while borrowing
-                    </p>
-                  </div>
-                  <div className={styles.benefitItem}>
-                    <img src="/term-4.svg" alt="term 4" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 04 )</span>
-                    <p className={styles.benefitDescription}>Effective positive carry of ~2.3% on borrowed funds</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={styles.collatration}>
-              <h5 className={styles.innerHead}>Collateralization</h5>
-              <div className={styles.collatrationItemSec}>
-                <div className={styles.collatrationItem}>
-                  <div className={styles.benefitCount}>
-                    ( 0 )
-                  </div>
-                  <div className={styles.collatrationDesc}>
-                    Initial minting requirement: 150% overcollateralization
-                  </div>
-                </div>
-                <div className={styles.collatrationItem}>
-                  <div className={styles.benefitCount}>
-                    ( 1 )
-                  </div>
-                  <div className={styles.collatrationDesc}>
-                    Liquidation threshold: Below 120% collateral value
-                  </div>
-                </div>
-                <div className={styles.collatrationItem}>
-                  <div className={styles.benefitCount}>
-                    ( 2 )
-                  </div>
-                  <div className={styles.collatrationDesc}>
-                    Liquidation penalty: 10% of repaid debt value
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         }

@@ -11,7 +11,7 @@ export default function Header() {
 
   const navLinksLeft = [
     { href: "#stabilityfund", label: "Stability Fund" },
-    { href: "#", label: "Lending Vault" },
+    { href: "#lanidngVault", label: "Lending Vault" },
   ];
 
   const navLinksRight = [
