@@ -277,7 +277,7 @@ export default function HowItWorks() {
                 ref={riveContainerRef}
                   style={{
                     width: "100%",
-                    height: isMobile ? "450px" : "650px",
+                    height: isMobile ? "450px" : "500px",
                     maxWidth: "1200px",
                     margin: "0 auto",
                     opacity: isAnimating ? 0.7 : 1,
