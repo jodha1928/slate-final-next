@@ -68,7 +68,7 @@ const calSF = calSegment(tangencySF, 0.15);
 const pct = (v: number) => `${(v * 100).toFixed(0)}%`;
 const fmt = (v: number) => v.toFixed(3);
 
-export default function FrontiersCalChart(): JSX.Element {
+export default function FrontiersCalChart(){
   return (
     <div
       style={{
@@ -139,8 +139,8 @@ export default function FrontiersCalChart(): JSX.Element {
           />
 
           {/* Tangency markers */}
-          <ReferenceDot x={tangencyNoSF.x} y={tangencyNoSF.y} r={6} isFront label="Tangency (No SF)" />
-          <ReferenceDot x={tangencySF.x} y={tangencySF.y} r={6} isFront label="Tangency (With SF)" />
+          <ReferenceDot x={tangencyNoSF.x} y={tangencyNoSF.y} r={6} label="Tangency (No SF)" />
+          <ReferenceDot x={tangencySF.x} y={tangencySF.y} r={6} label="Tangency (With SF)" />
         </LineChart>
       </ResponsiveContainer>
     </div>
