@@ -133,34 +133,78 @@ export default function HowItWorks() {
 }, [current, timelines, rive]);
 
   // Handle animation transitions smoothly
-  const handleAnimationChange = useCallback((direction) => {
+const handleAnimationChange = useCallback(
+  (direction) => {
     if (isAnimating) return;
-
     setIsAnimating(true);
 
-    // Fade out current animation
-    if (rive) {
-      rive.pause();
-    }
+    if (rive) rive.pause();
 
-    // Change animation after a very short delay
     setTimeout(() => {
-      setCurrent(prev => {
-        const newCurrent = direction === 'next'
-          ? Math.min(prev + 1, timelines.length - 1)
-          : Math.max(prev - 1, 0);
-        return newCurrent;
-      });
+      if (direction === "next") {
+        if (current < timelines.length - 1) {
+          setCurrent((c) => c + 1);
+        } else {
+          // special case: Managing a Vault → cycle inner buttons instead of skipping step
+          if (currentStep === "Managing a Vault") {
+            const maxIndex = 3; // Withdraw JUSD, Withdraw Collateral, Repay JUSD, Add Collateral
+            if (activeInnerButtonMap.borrow < maxIndex) {
+              setActiveInnerButtonMap((prev) => ({
+                ...prev,
+                borrow: prev.borrow + 1,
+              }));
+              setCurrent(0);
+              return;
+            }
+          }
 
-      // Fade in new animation
-      setTimeout(() => {
-        if (rive) {
-          rive.play();
+          // otherwise → go to next step
+          if (activeStep < steps.length - 1) {
+            setActiveStep((s) => s + 1);
+            setCurrent(0);
+          }
         }
+      } else if (direction === "prev") {
+        if (current > 0) {
+          setCurrent((c) => c - 1);
+        } else {
+          // special case: Managing a Vault → cycle inner buttons backwards
+          if (currentStep === "Managing a Vault") {
+            if (activeInnerButtonMap.borrow > 0) {
+              setActiveInnerButtonMap((prev) => ({
+                ...prev,
+                borrow: prev.borrow - 1,
+              }));
+              setCurrent(0);
+              return;
+            }
+          }
+
+          // otherwise → go to previous step
+          if (activeStep > 0) {
+            setActiveStep((s) => s - 1);
+            setCurrent(0); // or timelines.length - 1 if you want last animation
+          }
+        }
+      }
+
+      setTimeout(() => {
+        if (rive) rive.play();
         setIsAnimating(false);
       }, 50);
     }, 50);
-  }, [rive, isAnimating, timelines.length]);
+  },
+  [rive, isAnimating, current, timelines.length, activeStep, steps.length, currentStep, activeInnerButtonMap.borrow]
+);
+  const isFirst =
+  activeStep === 0 &&
+  current === 0 &&
+  !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow > 0);
+
+const isLast =
+  activeStep === steps.length - 1 &&
+  current === timelines.length - 1 &&
+  !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow < 3);
 
   useEffect(() => {
     setCurrent(0);
@@ -264,13 +308,13 @@ export default function HowItWorks() {
                     <>
                       <ArrowButton
                         direction="prev"
-                        disabled={current === 0 || isAnimating}
+                        disabled={isFirst}
                         onClick={() => handleAnimationChange('prev')}
                       />
 
                       <ArrowButton
                         direction="next"
-                        disabled={current >= timelines.length - 1 || isAnimating}
+                         disabled={isLast}
                         onClick={() => handleAnimationChange('next')}
                       />
                     </>
