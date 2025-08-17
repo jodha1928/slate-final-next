@@ -581,9 +581,9 @@
     .leftCol {
         display: flex;
         gap: 5px;
-        margin: 0 10px;
+        margin: 20px 10px 0;
         position: relative;
-        min-height: 120px;
+        min-height: 150px;
         .innerButtons {
             position: absolute;
             bottom: -10px;
