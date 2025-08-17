@@ -71,17 +71,17 @@ export default function HowItWorks() {
     } else if (tab === "earn") {
       if (currentStep === "Deposit JUSD") {
         return [
-          { artboard: isMobile ? "investing" : "investing", animation: "investing_1", duration: 2500 },
-          { artboard: isMobile ? "investing" : "investing", animation: "investing_2", duration: 4000 },
+          { artboard: isMobile ? "investingMobile" : "investing", animation: "investing_1", duration: 2500 },
+          { artboard: isMobile ? "investingMobile" : "investing", animation: "investing_2", duration: 4000 },
         ];
       } else if (currentStep === "Earn Returns") {
         return [
-          { artboard: isMobile ? "investing" : "investing", animation: "liquidation_1", duration: 4000 },
-          { artboard: isMobile ? "investing" : "investing", animation: "liquidation_2", duration: 7500 },
+          { artboard: isMobile ? "investingMobile" : "investing", animation: "liquidation_1", duration: 4000 },
+          { artboard: isMobile ? "investingMobile" : "investing", animation: "liquidation_2", duration: 7500 },
         ];
       } else if (currentStep === "Withdraw Anytime") {
         return [
-          { artboard: isMobile ? "investing" : "investing", animation: "liquidation_3", duration: 4000 },
+          { artboard: isMobile ? "investingMobile" : "investing", animation: "liquidation_3", duration: 4000 },
         ];
       }
     }
@@ -474,7 +474,7 @@ export default function HowItWorks() {
                 </div>
               </div>
               <div className={styles.dataSource}>
-                <span className={styles.spanText}>
+                <span className={`${styles.spanText} ${styles.highlightSpanTxt}`}>
                   Data source:
                 </span>
                 <span className={styles.spanTextRight}>
@@ -485,7 +485,7 @@ export default function HowItWorks() {
                 <MultiLineChart />
               </div>
               <div className={styles.dataSource}>
-                <span className={styles.spanText}>
+                <span className={`${styles.spanText} ${styles.highlightSpanTxt}`}>
                   Note:
                 </span>
                 <span className={styles.spanTextRight}>
