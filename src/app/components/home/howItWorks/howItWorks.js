@@ -141,49 +141,60 @@ const handleAnimationChange = useCallback(
     if (rive) rive.pause();
 
     setTimeout(() => {
-      if (direction === "next") {
-        if (current < timelines.length - 1) {
-          setCurrent((c) => c + 1);
-        } else {
-          // special case: Managing a Vault → cycle inner buttons instead of skipping step
-          if (currentStep === "Managing a Vault") {
-            const maxIndex = 3; // Withdraw JUSD, Withdraw Collateral, Repay JUSD, Add Collateral
-            if (activeInnerButtonMap.borrow < maxIndex) {
-              setActiveInnerButtonMap((prev) => ({
-                ...prev,
-                borrow: prev.borrow + 1,
-              }));
+      // Special case: Managing a Vault
+      if (currentStep === "Managing a Vault") {
+        if (direction === "next") {
+          if (activeInnerButtonMap.borrow < 3) {
+            setActiveInnerButtonMap((prev) => ({
+              ...prev,
+              borrow: prev.borrow + 1,
+            }));
+            setCurrent(0);
+            setIsAnimating(false);
+            if (rive) rive.play();
+            return;
+          } else {
+            // last inner step → move to next main step
+            if (activeStep < steps.length - 1) {
+              setActiveStep((s) => s + 1);
+              setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 })); // reset inner
               setCurrent(0);
-              return;
             }
           }
-
-          // otherwise → go to next step
-          if (activeStep < steps.length - 1) {
+        } else if (direction === "prev") {
+          if (activeInnerButtonMap.borrow > 0) {
+            setActiveInnerButtonMap((prev) => ({
+              ...prev,
+              borrow: prev.borrow - 1,
+            }));
+            setCurrent(0);
+            setIsAnimating(false);
+            if (rive) rive.play();
+            return;
+          } else {
+            // first inner step → go back to previous main step
+            if (activeStep > 0) {
+              setActiveStep((s) => s - 1);
+              setCurrent(0);
+            }
+          }
+        }
+      }
+      // Normal case (other steps)
+      else {
+        if (direction === "next") {
+          if (current < timelines.length - 1) {
+            setCurrent((c) => c + 1);
+          } else if (activeStep < steps.length - 1) {
             setActiveStep((s) => s + 1);
             setCurrent(0);
           }
-        }
-      } else if (direction === "prev") {
-        if (current > 0) {
-          setCurrent((c) => c - 1);
-        } else {
-          // special case: Managing a Vault → cycle inner buttons backwards
-          if (currentStep === "Managing a Vault") {
-            if (activeInnerButtonMap.borrow > 0) {
-              setActiveInnerButtonMap((prev) => ({
-                ...prev,
-                borrow: prev.borrow - 1,
-              }));
-              setCurrent(0);
-              return;
-            }
-          }
-
-          // otherwise → go to previous step
-          if (activeStep > 0) {
+        } else if (direction === "prev") {
+          if (current > 0) {
+            setCurrent((c) => c - 1);
+          } else if (activeStep > 0) {
             setActiveStep((s) => s - 1);
-            setCurrent(0); // or timelines.length - 1 if you want last animation
+            setCurrent(0);
           }
         }
       }
@@ -194,8 +205,18 @@ const handleAnimationChange = useCallback(
       }, 50);
     }, 50);
   },
-  [rive, isAnimating, current, timelines.length, activeStep, steps.length, currentStep, activeInnerButtonMap.borrow]
+  [
+    rive,
+    isAnimating,
+    current,
+    timelines.length,
+    activeStep,
+    steps.length,
+    currentStep,
+    activeInnerButtonMap.borrow,
+  ]
 );
+
   const isFirst =
   activeStep === 0 &&
   current === 0 &&
@@ -302,8 +323,8 @@ const isLast =
             <div className={styles.rightCol}>
               <div className={styles.illustration}>
                 {(
-                  (tab === "borrow" && (currentStep === "Creating a Vault" || currentStep === "Liquidation")) ||
-                  (tab === "earn" && (currentStep === "Deposit JUSD" || currentStep === "Earn Returns"))
+                  (tab === "borrow") ||
+                  (tab === "earn")
                 ) && (
                     <>
                       <ArrowButton
