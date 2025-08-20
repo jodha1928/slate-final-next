@@ -36,12 +36,13 @@ export default function Banner() {
     <div className={styles.banner}>
       <div className={`${styles.bannerWrapper} container`}>
         <h1 className={styles.mainHead}>
-          Low-Cost <br /> Borrowing
+          Borrow for Less. <br />
+          Invest for Stability.
         </h1>
         <p className={styles.subHead}>
-          Deposit JUSD into the Stability Fund to
-          <br />
-          earn returns
+           SLATE is a decentralized lending protocol offering
+          low-cost borrowing with JUSD, and a Stability Fund 
+          designed to deliver stable, uncorrelated returns.
         </p>
         <div
           style={{

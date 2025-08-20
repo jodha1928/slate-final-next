@@ -25,11 +25,12 @@
 
 .subHead {
     font-size: 18px;
-    margin-bottom: 16px;
     line-height: 22px;
     color: #747474;
     font-weight: 500;
     letter-spacing: -1.15px;
+    max-width: 380px;
+    margin: 0 auto 16px;
     @media screen and (max-width: 768px) {
         font-size: 16px;
         line-height: 120%;

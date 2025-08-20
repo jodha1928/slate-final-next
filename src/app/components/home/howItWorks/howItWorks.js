@@ -461,63 +461,90 @@ const isLast =
            <div id="stabilityfund">
             <div className={styles.stabilityFund}>
               <div className={styles.leftContent}>
-                <h5 className={styles.subHead}>What is</h5>
-                <h2 className={styles.mainHead}>Stability Fund</h2>
+                {/* <h5 className={styles.subHead}>What is</h5> */}
+                <h2 className={styles.mainHead}>
+                  Stable, Uncorrelated Returns in All Market Conditions
+                </h2>
               </div>
               <div className={styles.rightContent}>
                 <p className={styles.description}>
-                  The Stability Fund provides uncorrelated returns that increase during market downturns. When StETH prices fall, more Lending Vaults become eligible for liquidation.  The Stability Fund purchases this collateral at a 10% discount to market value. This counter-cyclical approach helps protect against drawdowns and delivers higher returns during market stress.
+                  Deposit JUSD into the Stability Fund and earn from liquidation premiums, a source of yield that grows when markets drop, without taking price exposure.
                 </p>
               </div>
             </div>
             <div className={styles.hiwSec}>
               <div className={styles.leftSec}>
-                <h5 className={styles.innerHead}>How It Works</h5>
+                <h5 className={styles.innerHead}>How Earning Works</h5>
                 <ul className={styles.hiwList}>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>1.</span>
-                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#A96E00" }}>Deposit JUSD into the Stability Fund</span> Your JUSD provides the liquidity needed to instantly liquidate risky vaults.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>2.</span>
-                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#A96E00" }}>Earn from Liquidations</span>  When a vault’s collateral ratio falls below the safety threshold, the Fund acquires collateral at a discount, creating profit.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>3.</span>
-                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#A96E00" }}>No Market Drawdown Risk</span> Your returns come from liquidation premiums and the Treasury backstop, not from betting on asset prices.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>4.</span>
-                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#A96E00" }}>Transparent and On-Chain</span> All Stability Fund activity and earnings are visible in real time.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>5.</span>
-                    <p className={styles.hiwItemDescription}>This 10% discount translates directly into depositor profits</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#A96E00" }}>Flexible Access</span> Withdraw your funds when you need them, with the freedom to stay invested through market cycles. <span className={styles.finalNote}>(Final withdrawal rules to be confirmed at launch.)</span>
+                    </p>
                   </li>
                 </ul>
               </div>
               <div className={styles.rightSec}>
-                <h2 className={styles.innerHead}>Key Benefits</h2>
+                <h2 className={styles.innerHead}>Why Invest in the Stability Fund</h2>
                 <div className={styles.benefitList}>
                   <div className={styles.benefitItem}>
                     <img src="/benefit-1.svg" alt="Benefit 1" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 01 )</span>
-                    <p className={styles.benefitDescription}>Truly uncorrelated returns with no historical drawdowns</p>
+                    <span className={styles.benefitSubHead}>Uncorrelated Returns</span>
+                    <p className={styles.benefitDescription}>
+                      Historically low correlation with equities, bonds, and crypto means the Fund can add stability to almost any portfolio.
+                    </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/benefit-2.svg" alt="Benefit 2" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 02 )</span>
-                    <p className={styles.benefitDescription}>Returns increase during market volatility and downturns</p>
+                    <img src="/benefit-4.svg" alt="Benefit 2" className={styles.benefitImage} />
+                    <span className={styles.benefitSubHead}>No Price Drawdowns</span>
+                    <p className={styles.benefitDescription}>
+                      Returns are generated from liquidation premiums, not market direction, resulting in steady growth through bull and bear markets.
+                    </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/benefit-3.svg" alt="Benefit 3" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 03 )</span>
-                    <p className={styles.benefitDescription}>Seizes StETH at a 10% discount during liquidations</p>
+                    <img src="/benefit-2.svg" alt="Benefit 3" className={styles.benefitImage} />
+                    <span className={styles.benefitSubHead}>Crisis-Resilient</span>
+                    <p className={styles.benefitDescription}>
+                      Tends to perform best when markets fall, as liquidation activity increases.
+                    </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/benefit-4.svg" alt="Benefit 4" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 04 )</span>
-                    <p className={styles.benefitDescription}>Automatic liquidation process requires no manual trading</p>
+                    <img src="/benefit-3.svg" alt="Benefit 4" className={styles.benefitImage} />
+                    <span className={styles.benefitSubHead}>Stablecoin-Denominated</span>
+                    <p className={styles.benefitDescription}>
+                      All returns paid in JUSD, keeping performance independent of asset price swings.
+                    </p>
+                  </div>
+                  <div className={`${styles.benefitItem} ${styles.benifitFullWidth}`}>
+                    <img src="/benefit-3.svg" alt="Benefit 4" className={styles.benefitImage} />
+                    <span className={styles.benefitSubHead}>Portfolio Efficiency</span>
+                    <p className={styles.benefitDescription}>
+                      Adding the Stability Fund can shift your efficient frontier upward, improving risk-adjusted returns without adding volatility.
+                    </p>
                   </div>
                 </div>
               </div>
