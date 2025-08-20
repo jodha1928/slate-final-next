@@ -364,65 +364,91 @@ const isLast =
           <div className={styles.lendingVaultSection} id="lanidngVault">
             <div className={styles.stabilityFund}>
               <div className={styles.leftContent}>
-                <h5 className={styles.subHead}>What is</h5>
-                <h2 className={styles.mainHead}>Lending Vault</h2>
+                {/* <h5 className={styles.subHead}>What is</h5> */}
+                <h2 className={styles.mainHead}>
+                  Low-Cost Borrowing with No Repayment Schedule
+                </h2>
               </div>
               <div className={styles.rightContent}>
                 <p className={styles.description}>
-                  Lending Vaults allow you to access liquidity against your StETH holdings. The fixed interest rate is 0.5%, which wont change over time unlike variable rate protocols.  You continue earning staking rewards from Lido (currently ~2.8%) while borrowing. After accounting for the 0.5% borrow cost, this creates a positive carry of 2.3% on borrowed funds.
+                  Borrow JUSD against your ETH or stETH at a fixed 1% annual interest rate keeping your staking rewards while accessing liquidity whenever you need it.
                 </p>
               </div>
             </div>
             <div className={styles.hiwSec}>
               <div className={styles.leftSec}>
-                <h5 className={styles.innerHead}>How It Works</h5>
+                <h5 className={styles.innerHead}>
+                  How Borrowing Works
+                </h5>
                 <ul className={styles.hiwList}>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>1.</span>
-                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#076993"}}>Deposit ETH or stETH</span> Open a vault and lock your collateral securely on-chain.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>2.</span>
-                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#076993"}}>Mint JUSD</span> Borrow up to your collateral limit at a fixed 1% annual rate. No hidden fees. No surprise interest hikes.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>3.</span>
-                    <p className={styles.hiwItemDescription}>Users deposit JUSD stablecoin into the Stability Fund</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#076993"}}>Put JUSD to Work</span> Trade, invest, or loop your position to amplify returns while your staked ETH continues earning yield.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>4.</span>
-                    <p className={styles.hiwItemDescription}>When a Lending Vault falls below 120% collateralization ratio</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#076993"}}>Manage Your Vault</span> Track your collateral ratio in real time. Add collateral or repay at your own pace to maintain safety thresholds.
+                    </p>
                   </li>
                   <li className={styles.hiwItem}>
                     <span className={styles.hiwItemNumber}>5.</span>
-                    <p className={styles.hiwItemDescription}>This 10% discount translates directly into depositor profits</p>
+                    <p className={styles.hiwItemDescription}>
+                      <span style={{ color: "#076993"}}>Repay Anytime</span> Close your vault when ready and reclaim your collateral in full.
+                    </p>
                   </li>
                 </ul>
               </div>
               <div className={styles.rightSec}>
-                <h2 className={styles.innerHead}>Terms</h2>
+                <h2 className={styles.innerHead}>Why Borrow on SLATE</h2>
                 <div className={styles.benefitList}>
                   <div className={styles.benefitItem}>
                     <img src="/term-1.svg" alt="term 1" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 01 )</span>
-                    <p className={styles.benefitDescription}>This 10% discount translates directly into depositor profits</p>
+                    <span className={styles.benefitSubHead}>Lowest Fixed Rate in DeFi</span>
+                    <p className={styles.benefitDescription}>Just 1% annual interest, with no risk of sudden hikes.</p>
                   </div>
                   <div className={styles.benefitItem}>
                     <img src="/term-2.svg" alt="term 2" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 02 )</span>
-                    <p className={styles.benefitDescription}>Rate remains fixed for the duration of the vault</p>
+                    <span className={styles.benefitSubHead}>Keep Earning Staking Rewards</span>
+                    <p className={styles.benefitDescription}>Returns increase during market volatility and downturns</p>
                   </div>
                   <div className={styles.benefitItem}>
                     <img src="/term-3.svg" alt="term 3" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 03 )</span>
+                    <span className={styles.benefitSubHead}>Unlock Liquidity Without Selling</span>
                     <p className={styles.benefitDescription}>
-                      Continue earning StETH staking rewards (~2.8%) while borrowing
+                      Access funds without triggering a taxable sale of your crypto holdings.
                     </p>
                   </div>
                   <div className={styles.benefitItem}>
                     <img src="/term-4.svg" alt="term 4" className={styles.benefitImage} />
-                    <span className={styles.benefitCount}>( 04 )</span>
-                    <p className={styles.benefitDescription}>Effective positive carry of ~2.3% on borrowed funds</p>
+                    <span className={styles.benefitSubHead}>Leverage ETH Exposure</span>
+                    <p className={styles.benefitDescription}>Loop positions up to ~3× at max collateralization, boosting both exposure and yield.</p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-3.svg" alt="term 3" className={styles.benefitImage} />
+                    <span className={styles.benefitSubHead}>Full Control</span>
+                    <p className={styles.benefitDescription}>
+                      No repayment schedule; maintain collateral health and close the position when you choose
+                    </p>
+                  </div>
+                  <div className={styles.benefitItem}>
+                    <img src="/term-4.svg" alt="term 4" className={styles.benefitImage} />
+                    <span className={styles.benefitSubHead}>Use JUSD Anywhere</span>
+                    <p className={styles.benefitDescription}>Trade, invest, or deploy into DeFi strategies.</p>
                   </div>
                 </div>
               </div>
