@@ -99,147 +99,147 @@ export default function HowItWorks() {
   });
 
   useEffect(() => {
-  if (!rive || !riveContainerRef.current) return;
+    if (!rive || !riveContainerRef.current) return;
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        rive.play(timelines[current]?.animation);
-      } else {
-        rive.pause();
-      }
-    },
-    { threshold: 0.25 } // 25% visible before playing
-  );
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          rive.play(timelines[current]?.animation);
+        } else {
+          rive.pause();
+        }
+      },
+      { threshold: 0.25 } // 25% visible before playing
+    );
 
-  observer.observe(riveContainerRef.current);
+    observer.observe(riveContainerRef.current);
 
-  return () => observer.disconnect();
-}, [rive, timelines, current]);
+    return () => observer.disconnect();
+  }, [rive, timelines, current]);
 
- useEffect(() => {
-  if (!rive) return;
+  useEffect(() => {
+    if (!rive) return;
 
-  const { artboard, animation } = timelines[current] || {};
-  if (!artboard || !animation) return;
+    const { artboard, animation } = timelines[current] || {};
+    if (!artboard || !animation) return;
 
-  // Always reload the artboard fresh
-  rive.load({
-    src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
-    artboard,
-    animations: animation,
-    autoplay: true,
-  });
-}, [current, timelines, rive]);
+    // Always reload the artboard fresh
+    rive.load({
+      src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
+      artboard,
+      animations: animation,
+      autoplay: true,
+    });
+  }, [current, timelines, rive]);
 
   // Handle animation transitions smoothly
-const handleAnimationChange = useCallback(
-  (direction) => {
-    if (isAnimating) return;
-    setIsAnimating(true);
+  const handleAnimationChange = useCallback(
+    (direction) => {
+      if (isAnimating) return;
+      setIsAnimating(true);
 
-    if (rive) rive.pause();
+      if (rive) rive.pause();
 
-    setTimeout(() => {
-      // Special case: Managing a Vault
-      if (currentStep === "Managing a Vault") {
-        if (direction === "next") {
-          if (activeInnerButtonMap.borrow < 3) {
-            setActiveInnerButtonMap((prev) => ({
-              ...prev,
-              borrow: prev.borrow + 1,
-            }));
-            setCurrent(0);
-            setIsAnimating(false);
-            if (rive) rive.play();
-            return;
-          } else {
-            // last inner step → move to next main step
-            if (activeStep < steps.length - 1) {
-              setActiveStep((s) => s + 1);
-              setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 })); // reset inner
+      setTimeout(() => {
+        // Special case: Managing a Vault
+        if (currentStep === "Managing a Vault") {
+          if (direction === "next") {
+            if (activeInnerButtonMap.borrow < 3) {
+              setActiveInnerButtonMap((prev) => ({
+                ...prev,
+                borrow: prev.borrow + 1,
+              }));
               setCurrent(0);
+              setIsAnimating(false);
+              if (rive) rive.play();
+              return;
+            } else {
+              // last inner step → move to next main step
+              if (activeStep < steps.length - 1) {
+                setActiveStep((s) => s + 1);
+                setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 })); // reset inner
+                setCurrent(0);
+              }
+            }
+          } else if (direction === "prev") {
+            if (activeInnerButtonMap.borrow > 0) {
+              setActiveInnerButtonMap((prev) => ({
+                ...prev,
+                borrow: prev.borrow - 1,
+              }));
+              setCurrent(0);
+              setIsAnimating(false);
+              if (rive) rive.play();
+              return;
+            } else {
+              // first inner step → go back to previous main step
+              if (activeStep > 0) {
+                setActiveStep((s) => s - 1);
+                setCurrent(0);
+              }
             }
           }
-        } else if (direction === "prev") {
-          if (activeInnerButtonMap.borrow > 0) {
-            setActiveInnerButtonMap((prev) => ({
-              ...prev,
-              borrow: prev.borrow - 1,
-            }));
-            setCurrent(0);
-            setIsAnimating(false);
-            if (rive) rive.play();
-            return;
-          } else {
-            // first inner step → go back to previous main step
-            if (activeStep > 0) {
+        }
+        // Normal case (other steps)
+        else {
+          if (direction === "next") {
+            if (current < timelines.length - 1) {
+              setCurrent((c) => c + 1);
+            } else if (activeStep < steps.length - 1) {
+              setActiveStep((s) => s + 1);
+              setCurrent(0);
+            }
+          } else if (direction === "prev") {
+            if (current > 0) {
+              setCurrent((c) => c - 1);
+            } else if (activeStep > 0) {
               setActiveStep((s) => s - 1);
               setCurrent(0);
             }
           }
         }
-      }
-      // Normal case (other steps)
-      else {
-        if (direction === "next") {
-          if (current < timelines.length - 1) {
-            setCurrent((c) => c + 1);
-          } else if (activeStep < steps.length - 1) {
-            setActiveStep((s) => s + 1);
-            setCurrent(0);
-          }
-        } else if (direction === "prev") {
-          if (current > 0) {
-            setCurrent((c) => c - 1);
-          } else if (activeStep > 0) {
-            setActiveStep((s) => s - 1);
-            setCurrent(0);
-          }
-        }
-      }
 
-      setTimeout(() => {
-        if (rive) rive.play();
-        setIsAnimating(false);
+        setTimeout(() => {
+          if (rive) rive.play();
+          setIsAnimating(false);
+        }, 50);
       }, 50);
-    }, 50);
-  },
-  [
-    rive,
-    isAnimating,
-    current,
-    timelines.length,
-    activeStep,
-    steps.length,
-    currentStep,
-    activeInnerButtonMap.borrow,
-  ]
-);
+    },
+    [
+      rive,
+      isAnimating,
+      current,
+      timelines.length,
+      activeStep,
+      steps.length,
+      currentStep,
+      activeInnerButtonMap.borrow,
+    ]
+  );
 
   const isFirst =
-  activeStep === 0 &&
-  current === 0 &&
-  !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow > 0);
+    activeStep === 0 &&
+    current === 0 &&
+    !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow > 0);
 
-const isLast =
-  activeStep === steps.length - 1 &&
-  current === timelines.length - 1 &&
-  !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow < 3);
+  const isLast =
+    activeStep === steps.length - 1 &&
+    current === timelines.length - 1 &&
+    !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow < 3);
 
   useEffect(() => {
     setCurrent(0);
   }, [tab, activeStep]);
 
- useEffect(() => {
-  if (tab === "borrow") {
-    setActiveStep(0);
-    setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
-  } else if (tab === "earn") {
-    setActiveStep(0); // "Deposit JUSD"
-  }
-  setCurrent(0); // also reset animation index
-}, [tab]);
+  useEffect(() => {
+    if (tab === "borrow") {
+      setActiveStep(0);
+      setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
+    } else if (tab === "earn") {
+      setActiveStep(0); // "Deposit JUSD"
+    }
+    setCurrent(0); // also reset animation index
+  }, [tab]);
 
   const ArrowButton = useCallback(({ direction, disabled, onClick }) => (
     <div
@@ -264,101 +264,101 @@ const isLast =
     <div className={styles.howItWorks} id="hiw">
       <h2 className={styles.mainHead}>How Slate Protocol Works</h2>
 
-        {/* Tab Switcher */}
-        <div className={styles.tabSwitcherBox}>
-          <div className={styles.tabSwitcher}>
-            {["borrow", "earn"].map((type) => (
-              <button
-                key={type}
-                className={tab === type ? styles.activeTab : styles.inactiveTab}
-                onClick={() => {
-                  setTab(type);
-                  setCurrent(0);
-                }}
-              >
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </button>
-            ))}
-          </div>
+      {/* Tab Switcher */}
+      <div className={styles.tabSwitcherBox}>
+        <div className={styles.tabSwitcher}>
+          {["borrow", "earn"].map((type) => (
+            <button
+              key={type}
+              className={tab === type ? styles.activeTab : styles.inactiveTab}
+              onClick={() => {
+                setTab(type);
+                setCurrent(0);
+              }}
+            >
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Step + Video Section */}
-        <div className={styles.contentRow}>
-          <div className={styles.innerContentRow}>
-            <div className={styles.leftCol}>
-              {steps.map((step, idx) => (
-                <div key={idx} className={styles.stepBox}>
-                  <h2
-                    className={`${styles.stepTitle} ${activeStep === idx ? styles.activeStep : ""}`}
-                    onClick={() => {
-                      setActiveStep(idx);
-                      setCurrent(0);
-                    }}
-                  >
-                    {step.title}
-                    <span className={styles.stepNumber}>({step.number})</span>
-                  </h2>
-
-                  {tab === "borrow" && step.title === "Managing a Vault" && activeStep === idx && (
-                    <div className={styles.innerButtons}>
-                      {["Withdraw JUSD", "Withdraw Collateral", "Repay JUSD", "Add Collateral"].map((label, i) => (
-                        <button
-                          key={label}
-                          className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
-                          onClick={() => {
-                            setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
-                            setCurrent(0);
-                          }}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Right Column - Video & Arrows */}
-            <div className={styles.rightCol}>
-              <div className={styles.illustration}>
-                {(
-                  (tab === "borrow") ||
-                  (tab === "earn")
-                ) && (
-                    <>
-                      <ArrowButton
-                        direction="prev"
-                        disabled={isFirst}
-                        onClick={() => handleAnimationChange('prev')}
-                      />
-
-                      <ArrowButton
-                        direction="next"
-                         disabled={isLast}
-                        onClick={() => handleAnimationChange('next')}
-                      />
-                    </>
-                  )}
-                <div
-                ref={riveContainerRef}
-                  style={{
-                    width: "100%",
-                    height: isMobile ? "450px" : "500px",
-                    maxWidth: "1200px",
-                    margin: "0 auto",
-                    opacity: isAnimating ? 0.7 : 1,
-                    transition: 'opacity 0.1s ease',
+      {/* Step + Video Section */}
+      <div className={styles.contentRow}>
+        <div className={styles.innerContentRow}>
+          <div className={styles.leftCol}>
+            {steps.map((step, idx) => (
+              <div key={idx} className={styles.stepBox}>
+                <h2
+                  className={`${styles.stepTitle} ${activeStep === idx ? styles.activeStep : ""}`}
+                  onClick={() => {
+                    setActiveStep(idx);
+                    setCurrent(0);
                   }}
                 >
-                  {timelines[current] && (
-                    <RiveComponent />
-                  )}
-                </div>
+                  {step.title}
+                  <span className={styles.stepNumber}>({step.number})</span>
+                </h2>
+
+                {tab === "borrow" && step.title === "Managing a Vault" && activeStep === idx && (
+                  <div className={styles.innerButtons}>
+                    {["Withdraw JUSD", "Withdraw Collateral", "Repay JUSD", "Add Collateral"].map((label, i) => (
+                      <button
+                        key={label}
+                        className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
+                        onClick={() => {
+                          setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
+                          setCurrent(0);
+                        }}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Right Column - Video & Arrows */}
+          <div className={styles.rightCol}>
+            <div className={styles.illustration}>
+              {(
+                (tab === "borrow") ||
+                (tab === "earn")
+              ) && (
+                  <>
+                    <ArrowButton
+                      direction="prev"
+                      disabled={isFirst}
+                      onClick={() => handleAnimationChange('prev')}
+                    />
+
+                    <ArrowButton
+                      direction="next"
+                      disabled={isLast}
+                      onClick={() => handleAnimationChange('next')}
+                    />
+                  </>
+                )}
+              <div
+                ref={riveContainerRef}
+                style={{
+                  width: "100%",
+                  height: isMobile ? "450px" : "500px",
+                  maxWidth: "1200px",
+                  margin: "0 auto",
+                  opacity: isAnimating ? 0.7 : 1,
+                  transition: 'opacity 0.1s ease',
+                }}
+              >
+                {timelines[current] && (
+                  <RiveComponent />
+                )}
               </div>
             </div>
           </div>
         </div>
+      </div>
       <div className={`${styles.howItWorksWrapper} container`}>
         {tab === "borrow" ?
           <div className={styles.lendingVaultSection} id="lanidngVault">
@@ -417,36 +417,30 @@ const isLast =
                 <h2 className={styles.innerHead}>Why Borrow on SLATE</h2>
                 <div className={styles.benefitList}>
                   <div className={styles.benefitItem}>
-                    <img src="/term-1.svg" alt="term 1" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Lowest Fixed Rate in DeFi</span>
                     <p className={styles.benefitDescription}>Just 1% annual interest, with no risk of sudden hikes.</p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/term-2.svg" alt="term 2" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Keep Earning Staking Rewards</span>
                     <p className={styles.benefitDescription}>Returns increase during market volatility and downturns</p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/term-3.svg" alt="term 3" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Unlock Liquidity Without Selling</span>
                     <p className={styles.benefitDescription}>
                       Access funds without triggering a taxable sale of your crypto holdings.
                     </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/term-4.svg" alt="term 4" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Leverage ETH Exposure</span>
                     <p className={styles.benefitDescription}>Loop positions up to ~3× at max collateralization, boosting both exposure and yield.</p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/term-3.svg" alt="term 3" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Full Control</span>
                     <p className={styles.benefitDescription}>
                       No repayment schedule; maintain collateral health and close the position when you choose
                     </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/term-4.svg" alt="term 4" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Use JUSD Anywhere</span>
                     <p className={styles.benefitDescription}>Trade, invest, or deploy into DeFi strategies.</p>
                   </div>
@@ -454,30 +448,11 @@ const isLast =
               </div>
             </div>
             <div className={styles.collatration}>
-              <h5 className={styles.innerHead}>Collateralization</h5>
+              <h5 className={styles.innerHead}>Example</h5>
               <div className={styles.collatrationItemSec}>
                 <div className={styles.collatrationItem}>
-                  <div className={styles.benefitCount}>
-                    ( 0 )
-                  </div>
                   <div className={styles.collatrationDesc}>
-                    Initial minting requirement: 150% overcollateralization
-                  </div>
-                </div>
-                <div className={styles.collatrationItem}>
-                  <div className={styles.benefitCount}>
-                    ( 1 )
-                  </div>
-                  <div className={styles.collatrationDesc}>
-                    Liquidation threshold: Below 120% collateral value
-                  </div>
-                </div>
-                <div className={styles.collatrationItem}>
-                  <div className={styles.benefitCount}>
-                    ( 2 )
-                  </div>
-                  <div className={styles.collatrationDesc}>
-                    Liquidation penalty: 10% of repaid debt value
+                    If you open a vault at the maximum 150% overcollateralization ratio, you can loop the position to roughly 3× exposure. At today’s ETH staking yield of ~2.7% and a borrowing cost of 1%, that leverage can increase both your ETH exposure and your net yield — while still keeping your collateral staked.
                   </div>
                 </div>
               </div>
@@ -538,35 +513,30 @@ const isLast =
                 <h2 className={styles.innerHead}>Why Invest in the Stability Fund</h2>
                 <div className={styles.benefitList}>
                   <div className={styles.benefitItem}>
-                    <img src="/benefit-1.svg" alt="Benefit 1" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Uncorrelated Returns</span>
                     <p className={styles.benefitDescription}>
                       Historically low correlation with equities, bonds, and crypto means the Fund can add stability to almost any portfolio.
                     </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/benefit-4.svg" alt="Benefit 2" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>No Price Drawdowns</span>
                     <p className={styles.benefitDescription}>
                       Returns are generated from liquidation premiums, not market direction, resulting in steady growth through bull and bear markets.
                     </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/benefit-2.svg" alt="Benefit 3" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Crisis-Resilient</span>
                     <p className={styles.benefitDescription}>
                       Tends to perform best when markets fall, as liquidation activity increases.
                     </p>
                   </div>
                   <div className={styles.benefitItem}>
-                    <img src="/benefit-3.svg" alt="Benefit 4" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Stablecoin-Denominated</span>
                     <p className={styles.benefitDescription}>
                       All returns paid in JUSD, keeping performance independent of asset price swings.
                     </p>
                   </div>
                   <div className={`${styles.benefitItem} ${styles.benifitFullWidth}`}>
-                    <img src="/benefit-3.svg" alt="Benefit 4" className={styles.benefitImage} />
                     <span className={styles.benefitSubHead}>Portfolio Efficiency</span>
                     <p className={styles.benefitDescription}>
                       Adding the Stability Fund can shift your efficient frontier upward, improving risk-adjusted returns without adding volatility.

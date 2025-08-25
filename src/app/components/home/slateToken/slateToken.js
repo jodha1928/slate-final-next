@@ -8,23 +8,18 @@ const tokenUtilityItems = [
 	{
 		icon: "/token_utility_1.svg",
 		title: "Governance",
-		desc: "Vote on protocol upgrades, parameter changes, and treasury allocations",
+		desc: "Vote on key protocol decisions, including collateral types, safety thresholds, and incentive structures.",
 	},
 	{
 		icon: "/token_utility_2.svg",
-		title: "Rewards",
-		desc: "Earn rewards for participating in governance and protocol activities",
+		title: "Incentivization",
+		desc: "Earn SLATE for borrowing, Stability Fund deposits, and other growth-driving activities.",
 	},
 	{
 		icon: "/token_utility_3.svg",
-		title: "Passive Income",
-		desc: "Receive additional passive income for Stability Fund depositors",
-	},
-	{
-		icon: "/token_utility_4.svg",
-		title: "Incentives",
-		desc: "Incentivize behaviors that benefit the protocol ecosystem",
-	},
+		title: "Alignment",
+		desc: "Protocol revenues from lending, liquidations, arbitrage, and swap fees are used to regularly buy back SLATE from the market, with purchased tokens directed toward ongoing rewards and strategic incentives.",
+	}
 ];
 
 const earningMechanismItems = [
