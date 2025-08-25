@@ -13,46 +13,53 @@ import {
 import { useEffect, useState } from "react";
 import * as d3 from "d3"; // for CSV + cumulative calc
 
-export default function MultiLineChart() {
+export default function MultiLineChart({ includeCrypto = false }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-  d3.csv("/data/returns.csv").then((raw: Array<Record<string, string>>) => {
-    let initialValue = 10000;
-    const parseDate = d3.timeParse("%d/%m/%Y");
+    d3.csv("/data/returns.csv").then((raw: Array<Record<string, string>>) => {
+      let initialValue = 10000;
+      const parseDate = d3.timeParse("%d/%m/%Y");
 
-    let cumulative = {
-      StabilityFund: initialValue,
-      SP500: initialValue,
-      "Aggregate Bonds": initialValue,
-      Commodities: initialValue,
-      Gold: initialValue,
-    };
-
-    const processed = raw.map((d) => {
-      const date = parseDate(d["Date"]);
-      if (!date) return null;
-
-      // Use the correct header for Stability Fund
-      cumulative.StabilityFund *= 1 + +d["Alternative SF Returns"];
-      cumulative.SP500 *= 1 + +d["SPY"];
-      cumulative["Aggregate Bonds"] *= 1 + +d["Aggregate Bonds"];
-      cumulative.Commodities *= 1 + +d["Commodities"];
-      cumulative.Gold *= 1 + +d["Gold"];
-
-      return {
-        date: d3.timeFormat("%b '%y")(date),
-        stability: +cumulative.StabilityFund,
-        sp500: +cumulative.SP500,
-        bonds: +cumulative["Aggregate Bonds"],
-        commodities: +cumulative.Commodities,
-        gold: +cumulative.Gold,
+      let cumulative = {
+        StabilityFund: initialValue,
+        SP500: initialValue,
+        "Aggregate Bonds": initialValue,
+        Commodities: initialValue,
+        Gold: initialValue,
+        Bitcoin: initialValue,
+        Ethereum: initialValue,
       };
-    }).filter(Boolean);
 
-    setData(processed);
-  });
-}, []);
+      const processed = raw
+        .map((d) => {
+          const date = parseDate(d["Date"]);
+          if (!date) return null;
+
+          cumulative.StabilityFund *= 1 + +d["Alternative SF Returns"];
+          cumulative.SP500 *= 1 + +d["SPY"];
+          cumulative["Aggregate Bonds"] *= 1 + +d["Aggregate Bonds"];
+          cumulative.Commodities *= 1 + +d["Commodities"];
+          cumulative.Gold *= 1 + +d["Gold"];
+          cumulative.Bitcoin *= 1 + +d["Bitcoin"];
+          cumulative.Ethereum *= 1 + +d["Ethereum"];
+
+          return {
+            date: d3.timeFormat("%b '%y")(date),
+            stability: +cumulative.StabilityFund,
+            sp500: +cumulative.SP500,
+            bonds: +cumulative["Aggregate Bonds"],
+            commodities: +cumulative.Commodities,
+            gold: +cumulative.Gold,
+            bitcoin: +cumulative.Bitcoin,
+            ethereum: +cumulative.Ethereum,
+          };
+        })
+        .filter(Boolean);
+
+      setData(processed);
+    });
+  }, []);
 
   return (
     <div
@@ -60,7 +67,6 @@ export default function MultiLineChart() {
         width: "100%",
         height: 500,
         background: "#fff",
-        padding: "1rem",
         borderRadius: "12px",
       }}
     >
@@ -119,6 +125,26 @@ export default function MultiLineChart() {
             strokeWidth={2}
             dot={false}
           />
+          {includeCrypto && (
+            <>
+              <Line
+                type="linear"
+                dataKey="bitcoin"
+                stroke="#f7931a"
+                name="Bitcoin"
+                strokeWidth={2}
+                dot={false}
+              />
+              <Line
+                type="linear"
+                dataKey="ethereum"
+                stroke="#8c8c8c"
+                name="Ethereum"
+                strokeWidth={2}
+                dot={false}
+              />
+            </>
+          )}
         </LineChart>
       </ResponsiveContainer>
     </div>

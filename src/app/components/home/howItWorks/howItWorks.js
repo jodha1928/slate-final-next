@@ -14,6 +14,7 @@ export default function HowItWorks() {
   const [activeInnerButtonMap, setActiveInnerButtonMap] = useState({ borrow: 0 });
   const [isMobile, setIsMobile] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [checked, setChecked] = useState(false);
   const riveContainerRef = useRef(null);
 
   useEffect(() => {
@@ -99,147 +100,147 @@ export default function HowItWorks() {
   });
 
   useEffect(() => {
-    if (!rive || !riveContainerRef.current) return;
+  if (!rive || !riveContainerRef.current) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          rive.play(timelines[current]?.animation);
-        } else {
-          rive.pause();
-        }
-      },
-      { threshold: 0.25 } // 25% visible before playing
-    );
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        rive.play(timelines[current]?.animation);
+      } else {
+        rive.pause();
+      }
+    },
+    { threshold: 0.25 } // 25% visible before playing
+  );
 
-    observer.observe(riveContainerRef.current);
+  observer.observe(riveContainerRef.current);
 
-    return () => observer.disconnect();
-  }, [rive, timelines, current]);
+  return () => observer.disconnect();
+}, [rive, timelines, current]);
 
-  useEffect(() => {
-    if (!rive) return;
+ useEffect(() => {
+  if (!rive) return;
 
-    const { artboard, animation } = timelines[current] || {};
-    if (!artboard || !animation) return;
+  const { artboard, animation } = timelines[current] || {};
+  if (!artboard || !animation) return;
 
-    // Always reload the artboard fresh
-    rive.load({
-      src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
-      artboard,
-      animations: animation,
-      autoplay: true,
-    });
-  }, [current, timelines, rive]);
+  // Always reload the artboard fresh
+  rive.load({
+    src: tab === "borrow" ? "/riv/slate_lending_flow.riv" : "/riv/slate_investing_flow.riv",
+    artboard,
+    animations: animation,
+    autoplay: true,
+  });
+}, [current, timelines, rive]);
 
   // Handle animation transitions smoothly
-  const handleAnimationChange = useCallback(
-    (direction) => {
-      if (isAnimating) return;
-      setIsAnimating(true);
+const handleAnimationChange = useCallback(
+  (direction) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
 
-      if (rive) rive.pause();
+    if (rive) rive.pause();
 
-      setTimeout(() => {
-        // Special case: Managing a Vault
-        if (currentStep === "Managing a Vault") {
-          if (direction === "next") {
-            if (activeInnerButtonMap.borrow < 3) {
-              setActiveInnerButtonMap((prev) => ({
-                ...prev,
-                borrow: prev.borrow + 1,
-              }));
+    setTimeout(() => {
+      // Special case: Managing a Vault
+      if (currentStep === "Managing a Vault") {
+        if (direction === "next") {
+          if (activeInnerButtonMap.borrow < 3) {
+            setActiveInnerButtonMap((prev) => ({
+              ...prev,
+              borrow: prev.borrow + 1,
+            }));
+            setCurrent(0);
+            setIsAnimating(false);
+            if (rive) rive.play();
+            return;
+          } else {
+            // last inner step → move to next main step
+            if (activeStep < steps.length - 1) {
+              setActiveStep((s) => s + 1);
+              setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 })); // reset inner
               setCurrent(0);
-              setIsAnimating(false);
-              if (rive) rive.play();
-              return;
-            } else {
-              // last inner step → move to next main step
-              if (activeStep < steps.length - 1) {
-                setActiveStep((s) => s + 1);
-                setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 })); // reset inner
-                setCurrent(0);
-              }
-            }
-          } else if (direction === "prev") {
-            if (activeInnerButtonMap.borrow > 0) {
-              setActiveInnerButtonMap((prev) => ({
-                ...prev,
-                borrow: prev.borrow - 1,
-              }));
-              setCurrent(0);
-              setIsAnimating(false);
-              if (rive) rive.play();
-              return;
-            } else {
-              // first inner step → go back to previous main step
-              if (activeStep > 0) {
-                setActiveStep((s) => s - 1);
-                setCurrent(0);
-              }
             }
           }
-        }
-        // Normal case (other steps)
-        else {
-          if (direction === "next") {
-            if (current < timelines.length - 1) {
-              setCurrent((c) => c + 1);
-            } else if (activeStep < steps.length - 1) {
-              setActiveStep((s) => s + 1);
-              setCurrent(0);
-            }
-          } else if (direction === "prev") {
-            if (current > 0) {
-              setCurrent((c) => c - 1);
-            } else if (activeStep > 0) {
+        } else if (direction === "prev") {
+          if (activeInnerButtonMap.borrow > 0) {
+            setActiveInnerButtonMap((prev) => ({
+              ...prev,
+              borrow: prev.borrow - 1,
+            }));
+            setCurrent(0);
+            setIsAnimating(false);
+            if (rive) rive.play();
+            return;
+          } else {
+            // first inner step → go back to previous main step
+            if (activeStep > 0) {
               setActiveStep((s) => s - 1);
               setCurrent(0);
             }
           }
         }
+      }
+      // Normal case (other steps)
+      else {
+        if (direction === "next") {
+          if (current < timelines.length - 1) {
+            setCurrent((c) => c + 1);
+          } else if (activeStep < steps.length - 1) {
+            setActiveStep((s) => s + 1);
+            setCurrent(0);
+          }
+        } else if (direction === "prev") {
+          if (current > 0) {
+            setCurrent((c) => c - 1);
+          } else if (activeStep > 0) {
+            setActiveStep((s) => s - 1);
+            setCurrent(0);
+          }
+        }
+      }
 
-        setTimeout(() => {
-          if (rive) rive.play();
-          setIsAnimating(false);
-        }, 50);
+      setTimeout(() => {
+        if (rive) rive.play();
+        setIsAnimating(false);
       }, 50);
-    },
-    [
-      rive,
-      isAnimating,
-      current,
-      timelines.length,
-      activeStep,
-      steps.length,
-      currentStep,
-      activeInnerButtonMap.borrow,
-    ]
-  );
+    }, 50);
+  },
+  [
+    rive,
+    isAnimating,
+    current,
+    timelines.length,
+    activeStep,
+    steps.length,
+    currentStep,
+    activeInnerButtonMap.borrow,
+  ]
+);
 
   const isFirst =
-    activeStep === 0 &&
-    current === 0 &&
-    !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow > 0);
+  activeStep === 0 &&
+  current === 0 &&
+  !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow > 0);
 
-  const isLast =
-    activeStep === steps.length - 1 &&
-    current === timelines.length - 1 &&
-    !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow < 3);
+const isLast =
+  activeStep === steps.length - 1 &&
+  current === timelines.length - 1 &&
+  !(currentStep === "Managing a Vault" && activeInnerButtonMap.borrow < 3);
 
   useEffect(() => {
     setCurrent(0);
   }, [tab, activeStep]);
 
-  useEffect(() => {
-    if (tab === "borrow") {
-      setActiveStep(0);
-      setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
-    } else if (tab === "earn") {
-      setActiveStep(0); // "Deposit JUSD"
-    }
-    setCurrent(0); // also reset animation index
-  }, [tab]);
+ useEffect(() => {
+  if (tab === "borrow") {
+    setActiveStep(0);
+    setActiveInnerButtonMap((prev) => ({ ...prev, borrow: 0 }));
+  } else if (tab === "earn") {
+    setActiveStep(0); // "Deposit JUSD"
+  }
+  setCurrent(0); // also reset animation index
+}, [tab]);
 
   const ArrowButton = useCallback(({ direction, disabled, onClick }) => (
     <div
@@ -264,101 +265,101 @@ export default function HowItWorks() {
     <div className={styles.howItWorks} id="hiw">
       <h2 className={styles.mainHead}>How Slate Protocol Works</h2>
 
-      {/* Tab Switcher */}
-      <div className={styles.tabSwitcherBox}>
-        <div className={styles.tabSwitcher}>
-          {["borrow", "earn"].map((type) => (
-            <button
-              key={type}
-              className={tab === type ? styles.activeTab : styles.inactiveTab}
-              onClick={() => {
-                setTab(type);
-                setCurrent(0);
-              }}
-            >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Step + Video Section */}
-      <div className={styles.contentRow}>
-        <div className={styles.innerContentRow}>
-          <div className={styles.leftCol}>
-            {steps.map((step, idx) => (
-              <div key={idx} className={styles.stepBox}>
-                <h2
-                  className={`${styles.stepTitle} ${activeStep === idx ? styles.activeStep : ""}`}
-                  onClick={() => {
-                    setActiveStep(idx);
-                    setCurrent(0);
-                  }}
-                >
-                  {step.title}
-                  <span className={styles.stepNumber}>({step.number})</span>
-                </h2>
-
-                {tab === "borrow" && step.title === "Managing a Vault" && activeStep === idx && (
-                  <div className={styles.innerButtons}>
-                    {["Withdraw JUSD", "Withdraw Collateral", "Repay JUSD", "Add Collateral"].map((label, i) => (
-                      <button
-                        key={label}
-                        className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
-                        onClick={() => {
-                          setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
-                          setCurrent(0);
-                        }}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Right Column - Video & Arrows */}
-          <div className={styles.rightCol}>
-            <div className={styles.illustration}>
-              {(
-                (tab === "borrow") ||
-                (tab === "earn")
-              ) && (
-                  <>
-                    <ArrowButton
-                      direction="prev"
-                      disabled={isFirst}
-                      onClick={() => handleAnimationChange('prev')}
-                    />
-
-                    <ArrowButton
-                      direction="next"
-                      disabled={isLast}
-                      onClick={() => handleAnimationChange('next')}
-                    />
-                  </>
-                )}
-              <div
-                ref={riveContainerRef}
-                style={{
-                  width: "100%",
-                  height: isMobile ? "450px" : "500px",
-                  maxWidth: "1200px",
-                  margin: "0 auto",
-                  opacity: isAnimating ? 0.7 : 1,
-                  transition: 'opacity 0.1s ease',
+        {/* Tab Switcher */}
+        <div className={styles.tabSwitcherBox}>
+          <div className={styles.tabSwitcher}>
+            {["borrow", "earn"].map((type) => (
+              <button
+                key={type}
+                className={tab === type ? styles.activeTab : styles.inactiveTab}
+                onClick={() => {
+                  setTab(type);
+                  setCurrent(0);
                 }}
               >
-                {timelines[current] && (
-                  <RiveComponent />
-                )}
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Step + Video Section */}
+        <div className={styles.contentRow}>
+          <div className={styles.innerContentRow}>
+            <div className={styles.leftCol}>
+              {steps.map((step, idx) => (
+                <div key={idx} className={styles.stepBox}>
+                  <h2
+                    className={`${styles.stepTitle} ${activeStep === idx ? styles.activeStep : ""}`}
+                    onClick={() => {
+                      setActiveStep(idx);
+                      setCurrent(0);
+                    }}
+                  >
+                    {step.title}
+                    <span className={styles.stepNumber}>({step.number})</span>
+                  </h2>
+
+                  {tab === "borrow" && step.title === "Managing a Vault" && activeStep === idx && (
+                    <div className={styles.innerButtons}>
+                      {["Withdraw JUSD", "Withdraw Collateral", "Repay JUSD", "Add Collateral"].map((label, i) => (
+                        <button
+                          key={label}
+                          className={`${styles.actionItem} ${activeInnerButtonMap.borrow === i ? styles.active : ""}`}
+                          onClick={() => {
+                            setActiveInnerButtonMap((prev) => ({ ...prev, borrow: i }));
+                            setCurrent(0);
+                          }}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Right Column - Video & Arrows */}
+            <div className={styles.rightCol}>
+              <div className={styles.illustration}>
+                {(
+                  (tab === "borrow") ||
+                  (tab === "earn")
+                ) && (
+                    <>
+                      <ArrowButton
+                        direction="prev"
+                        disabled={isFirst}
+                        onClick={() => handleAnimationChange('prev')}
+                      />
+
+                      <ArrowButton
+                        direction="next"
+                         disabled={isLast}
+                        onClick={() => handleAnimationChange('next')}
+                      />
+                    </>
+                  )}
+                <div
+                ref={riveContainerRef}
+                  style={{
+                    width: "100%",
+                    height: isMobile ? "450px" : "500px",
+                    maxWidth: "1200px",
+                    margin: "0 auto",
+                    opacity: isAnimating ? 0.7 : 1,
+                    transition: 'opacity 0.1s ease',
+                  }}
+                >
+                  {timelines[current] && (
+                    <RiveComponent />
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       <div className={`${styles.howItWorksWrapper} container`}>
         {tab === "borrow" ?
           <div className={styles.lendingVaultSection} id="lanidngVault">
@@ -462,7 +463,6 @@ export default function HowItWorks() {
            <div id="stabilityfund">
             <div className={styles.stabilityFund}>
               <div className={styles.leftContent}>
-                {/* <h5 className={styles.subHead}>What is</h5> */}
                 <h2 className={styles.mainHead}>
                   Stable, Uncorrelated Returns in All Market Conditions
                 </h2>
@@ -553,7 +553,7 @@ export default function HowItWorks() {
                 </div>
                 <div className={styles.rightSideContent}>
                   <label className={styles.switchBtn}>
-                    <input type="checkbox" className={styles.inputRadio} />
+                    <input type="checkbox" className={styles.inputRadio} checked={checked} onChange={(e) => setChecked(e.target.checked)} />
                     <span className={styles.sliderRounded}></span>
                   </label>
                   <span className={styles.cryptoText}>
@@ -570,7 +570,9 @@ export default function HowItWorks() {
                 </span>
               </div>
               <div className={styles.chartBox}>
-                <MultiLineChart />
+                <MultiLineChart 
+                  includeCrypto={checked}
+                />
               </div>
               <div className={styles.dataSource}>
                 <span className={`${styles.spanText} ${styles.highlightSpanTxt}`}>
