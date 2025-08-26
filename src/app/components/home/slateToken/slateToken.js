@@ -110,15 +110,7 @@ export default function SlateToken() {
                 <div className={`${styles.slateTokenWrapper} container`}>
                     <div className={styles.slateTokenInnerSection}>
                         <p className={styles.slateTokenDescription}>
-                            Slate is the native governance token of the protocol, designed to
-                            align incentives between users and the protocol itself. The SLATE token
-                            serves as the governance token for the protocol, allowing holders to
-                            participate in decision-making and earn rewards. Initially distributed
-                            through an airdrop to early users, it creates a path for protocol
-                            ownership among its most active participants. Long-term, SLATE will be
-                            used to provide additional passive income to Stability Fund depositors
-                            and incentivize specific behaviors that benefit the protocol ecosystem
-                            as a whole.
+                            The SLATE token aligns borrowers, Stability Fund investors, and the platform itself. Holders gain a voice in governance, receive incentives for participation, and share in the protocol’s long-term growth.
                         </p>
                         <div className={styles.tokenUtility}>
                             <h6 className={styles.tokenUtilityTitle}>Token Utility</h6>
@@ -160,7 +152,7 @@ export default function SlateToken() {
                                 ))}
                             </div>
                         </div>
-                        <div className={styles.tokenUtility}>
+                        {/* <div className={styles.tokenUtility}>
                             <h6 className={styles.tokenUtilityTitle}>Token Distribution</h6>
                             <div className={`${styles.tokenUtilityList} ${styles.tokenDistributionList}`}>
                                 {tokenDistributionItems.map((item, idx) => (
@@ -179,24 +171,24 @@ export default function SlateToken() {
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </div> */}
                         <div className={`${styles.tokenUtility} ${styles.initialAirdrop}`}>
                             <div className={styles.initialAirdropContent}>
-                                <h6 className={styles.tokenUtilityTitle}>Initial Airdrop</h6>
-                                <p className={styles.initialAirdropDescription}>15% of the total SLATE supply will be airdropped to early users of the protocol.</p>
+                                <h6 className={styles.tokenUtilityTitle}>Provisional Distribution</h6>
+                                <p className={styles.initialAirdropDescription}>(subject to change before launch)</p>
                             </div>
                             <div className={styles.initialAirdropList}>
                                 <div className={styles.initialAirdropItem}>
-                                    <span className={styles.initialAirdropEligibility}>Eligibility</span>
-                                    <p className={styles.initialAirdropItemDesc}>Users who borrow JUSD by depositing StETH collateral during the initial phase.</p>
+                                    <span className={styles.initialAirdropEligibility}>20% First Airdrop</span>
+                                    <p className={styles.initialAirdropItemDesc}>Rewarding early participants</p>
                                 </div>
                                 <div className={styles.initialAirdropItem}>
-                                    <span className={styles.initialAirdropEligibility}>Eligibility</span>
-                                    <p className={styles.initialAirdropItemDesc}>Users who borrow JUSD by depositing StETH collateral during the initial phase.</p>
+                                    <span className={styles.initialAirdropEligibility}>20% Second Airdrop</span>
+                                    <p className={styles.initialAirdropItemDesc}>Supporting growth and adoption</p>
                                 </div>
                                 <div className={styles.initialAirdropItem}>
-                                    <span className={styles.initialAirdropEligibility}>Eligibility</span>
-                                    <p className={styles.initialAirdropItemDesc}>Users who borrow JUSD by depositing StETH collateral during the initial phase.</p>
+                                    <span className={styles.initialAirdropEligibility}>60% Treasury</span>
+                                    <p className={styles.initialAirdropItemDesc}>Treasury, long-term incentives, and founding team</p>
                                 </div>
                             </div>
                         </div>

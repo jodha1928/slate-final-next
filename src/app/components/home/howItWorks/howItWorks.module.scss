@@ -470,6 +470,10 @@
     font-weight: 500;
     letter-spacing: -.24;
     margin-left: 10px;
+    @media only screen and (max-width: 767px) {
+        font-size: 9px;
+        margin-left: 6px;
+    }
 }
 
 .rightSideContent {
@@ -516,6 +520,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @media only screen and (max-width: 767px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 }
 
 

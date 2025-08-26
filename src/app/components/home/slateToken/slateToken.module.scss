@@ -1,10 +1,6 @@
 .slateTokenWrapper {
     border-left: 1px dashed #BCBCBC;
     border-right: 1px dashed #BCBCBC;
-    padding-bottom: 100px;
-    @media only screen and (max-width: 767px) {
-        padding-bottom: 0;
-    }
 }
 
 .slateTokenContent {
@@ -326,6 +322,7 @@
     color: #4E4E4E;
     letter-spacing: -1.4px;
     margin-bottom: 12px;
+    min-width: 202px;
 }
 
 .initialAirdropItem {
