@@ -8,6 +8,7 @@ export default function Footer() {
   return (
     <header className={styles.footer}>
       <div className={`${styles.footerWrapper} container`}>
+        <h3 className={styles.allRights}>For partnership and media inquiries</h3>
         <ul className={styles.footerMenu}>
             <li className={styles.menuItem}>
                 <Link href="/">
@@ -35,7 +36,7 @@ export default function Footer() {
                 </Link>
             </li>
         </ul>
-        <h3 className={styles.allRights}>All Rights Reservedn slate protocol</h3>
+        <h3 className={`${styles.allRights} ${styles.smallText}`}>All Rights Reservedn slate protocol</h3>
       </div>
     </header>
   );

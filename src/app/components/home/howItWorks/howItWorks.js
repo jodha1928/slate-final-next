@@ -133,6 +133,25 @@ export default function HowItWorks() {
   });
 }, [current, timelines, rive]);
 
+useEffect(() => {
+  const handleHashChange = () => {
+    if (window.location.hash === "#hiw-earn") {
+      setTab("earn");
+    }
+    if (window.location.hash === "#hiw-borrow") {
+      setTab("borrow");
+    }
+  };
+
+  // Run on mount
+  handleHashChange();
+
+  // Listen for hash changes
+  window.addEventListener("hashchange", handleHashChange);
+
+  return () => window.removeEventListener("hashchange", handleHashChange);
+}, []);
+
   // Handle animation transitions smoothly
 const handleAnimationChange = useCallback(
   (direction) => {
@@ -272,9 +291,11 @@ const isLast =
               <button
                 key={type}
                 className={tab === type ? styles.activeTab : styles.inactiveTab}
+                id={`hiw-${type}`}
                 onClick={() => {
                   setTab(type);
                   setCurrent(0);
+                  window.location.hash = type === "earn" ? "#hiw-earn" : "#hiw-borrow";
                 }}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}

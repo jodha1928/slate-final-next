@@ -10,8 +10,8 @@ export default function Header() {
   const [activeLink, setActiveLink] = useState("#hiw"); // default active
 
   const navLinksLeft = [
-    { href: "#stabilityfund", label: "Stability Fund" },
-    { href: "#lanidngVault", label: "Lending Vault" },
+    { href: "#hiw-earn", label: "Stability Fund" },
+    { href: "#hiw-borrow", label: "Lending Vault" },
   ];
 
   const navLinksRight = [
@@ -23,6 +23,12 @@ export default function Header() {
     setActiveLink(href);
     setIsMenuOpen(false); // close mobile menu after click
   };
+
+  const handleNavClick = (href) => {
+  window.location.hash = href;
+  window.dispatchEvent(new HashChangeEvent("hashchange"));
+  setActiveLink(href);
+};
 
   return (
     <header className={styles.header}>
@@ -52,17 +58,23 @@ export default function Header() {
           </div>
           <ul className={styles.navList}>
             {/* Left side links */}
-            {navLinksLeft.map(({ href, label }) => (
-              <li
-                key={href}
-                className={`${styles.menuItem} ${activeLink === href ? styles.active : ""
-                  }`}
-              >
-                <Link href={href} onClick={() => handleClick(href)}>
-                  {label}
-                </Link>
-              </li>
-            ))}
+           {navLinksLeft.map((link) => (
+             <li
+                key={link.href}
+                className={`${styles.menuItem} ${activeLink === link.href ? styles.active : ""
+                }`}
+            >
+            <a
+              href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(link.href);
+              }}
+            >
+              {link.label}
+            </a>
+            </li>
+          ))}
 
             {/* Center Logo */}
             <li className={styles.logoItem}>

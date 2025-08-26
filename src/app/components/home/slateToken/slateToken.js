@@ -101,7 +101,7 @@ export default function SlateToken() {
 						className={styles.slateTokenImage}
 					/>
 					<h5 className={styles.slateTokenText}>
-						is the Native Governance <br /> Token of the Protocol
+                        Governance, Incentives, and <br />Shared Success
 					</h5>
 				</div>
             </div>
@@ -191,26 +191,6 @@ export default function SlateToken() {
                                     <p className={styles.initialAirdropItemDesc}>Treasury, long-term incentives, and founding team</p>
                                 </div>
                             </div>
-                        </div>
-                        <div className={styles.tokenUtility}>
-                            <h6 className={`${styles.tokenUtilityTitle} ${styles.protocolBuybacksTitle}`}>Protocol Buybacks</h6>
-                            <p className={styles.tokenUtilityDescription}>
-                                The Treasury will use protocol earnings to periodically buy back SLATE from the market.
-                            </p>
-                            <div className={`${styles.earningMechanismList} ${styles.protocolBuybacksList}`}>
-                                {protocolBuybacksList.map((item, idx) => (
-                                    <div className={styles.earningMechanismItem} key={idx}>
-                                        <span className={styles.earningMechanismNumber}>
-                                            ( {item.number} )
-                                        </span>
-                                        <h5 className={styles.earningMechanismTitle}>
-                                            {item.title}
-                                        </h5>
-                                    </div>
-                                ))}
-                            </div>
-                            <h6 className={`${styles.earningMechanismTitle} ${styles.buyBackUsage}`}>Buy-back Usage</h6>
-                            <p className={styles.initialAirdropItemDesc}>Bought-back tokens will be used for continued incentivization of specific behaviors based on protocol needs.</p>
                         </div>
                     </div>
                 </div>
