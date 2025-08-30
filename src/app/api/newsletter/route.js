@@ -12,7 +12,7 @@ export async function POST(req) {
         }
         const data = await resend.emails.send({
             from: "newsletter@yourdomain.com", // Must be a verified sender in Resend
-            to: "bansalshivam325@gmail.com",
+            to: "tim@peercents.com",
             subject: "New Newsletter Signup",
             html: `<p>New subscriber: <b>${email}</b></p>`
         });
