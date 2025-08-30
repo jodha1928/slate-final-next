@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -13,67 +13,56 @@ import {
   ReferenceDot,
   ReferenceLine,
 } from "recharts";
+import * as d3 from "d3"; // for CSV parsing
 
-type Pt = { x: number; noSF: number; withSF: number };
+type Pt = { x: number; noSF?: number; withSF?: number };
 
 const rf = 0.035;
 
-// Volatility (x) points
-const vol = [
-  0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15,
-  0.16, 0.18, 0.20, 0.22, 0.24, 0.26, 0.28, 0.30, 0.32, 0.34,
-  0.36, 0.38, 0.40, 0.42, 0.44, 0.46, 0.48, 0.50, 0.52, 0.54,
-  0.56, 0.58, 0.60,
-];
+function FrontiersCalChart() {
+  const [data, setData] = useState<Pt[]>([]);
 
-// Frontier (No SF)
-const retNoSF = [
-  0.060, 0.072, 0.084, 0.095, 0.105, 0.112, 0.118, 0.125, 0.133, 0.142,
-  0.151, 0.158, 0.160, 0.167, 0.173, 0.179, 0.186, 0.192, 0.199, 0.206,
-  0.212, 0.215, 0.217, 0.221, 0.235, 0.242, 0.248, 0.253, 0.257, 0.260,
-  0.263, 0.266, 0.268,
-];
+  useEffect(() => {
+    d3.csv("/data/frontier.csv", d3.autoType).then((rows) => {
+      // Separate curves
+      const noSF = rows.filter((r) => r.Curve === "Frontier_No_SF");
+      const withSF = rows.filter((r) => r.Curve === "Frontier_With_SF");
 
-// Frontier (With SF) – slightly higher than No SF
-const retSF = retNoSF.map((y, i) =>
-  y +
-  [
-    0.0, 0.0, 0.005, 0.007, 0.010, 0.012, 0.013, 0.014, 0.014, 0.014, 0.014,
-    0.015, 0.016, 0.017, 0.018, 0.018, 0.018, 0.018, 0.018, 0.018, 0.018,
-    0.018, 0.018, 0.018, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010, 0.010,
-    0.010, 0.010,
-  ][i]
-);
+      // Merge into unified rows by volatility
+      const merged: Pt[] = noSF.map((row, i) => ({
+        x: row.Volatility,
+        noSF: row.Return,
+        withSF: withSF[i] ? withSF[i].Return : undefined,
+      }));
 
-// Build chart rows
-const data: Pt[] = vol.map((x, i) => ({ x, noSF: retNoSF[i], withSF: retSF[i] }));
+      setData(merged);
+    });
+  }, []);
 
-// Tangency points (approx from your ref)
-const tangencyNoSF = { x: 0.13, y: 0.122 };
-const tangencySF = { x: 0.045, y: 0.108 };
+  // Example tangency points (replace with actual logic if needed)
+  const tangencyNoSF = { x: 0.13, y: 0.122 };
+  const tangencySF = { x: 0.045, y: 0.108 };
 
-// Capital Allocation Line through (0, rf) and tangency, drawn to xEnd
-function calSegment(tangency: { x: number; y: number }, xEnd: number) {
-  const slope = (tangency.y - rf) / tangency.x;
-  const yEnd = rf + slope * xEnd;
-  return [
-    { x: 0, y: rf },
-    { x: xEnd, y: yEnd },
-  ] as const;
-}
+  const calSegment = (tangency: { x: number; y: number }, xEnd: number) => {
+    const slope = (tangency.y - rf) / tangency.x;
+    const yEnd = rf + slope * xEnd;
+    return [
+      { x: 0, y: rf },
+      { x: xEnd, y: yEnd },
+    ] as const;
+  };
 
-const calNoSF = calSegment(tangencyNoSF, 0.40);
-const calSF = calSegment(tangencySF, 0.15);
+  const calNoSF = calSegment(tangencyNoSF, 0.40);
+  const calSF = calSegment(tangencySF, 0.15);
 
-const pct = (v: number) => `${(v * 100).toFixed(0)}%`;
-const fmt = (v: number) => v.toFixed(3);
+  const pct = (v: number) => `${(v * 100).toFixed(0)}%`;
+  const fmt = (v: number) => v.toFixed(3);
 
-export default function FrontiersCalChart(){
   return (
     <div
       style={{
-        width: 925,           // requested resolution width
-        height: 400,          // requested resolution height
+        width: 925,
+        height: 400,
         background: "#fff",
         padding: 12,
         borderRadius: 8,
@@ -88,7 +77,7 @@ export default function FrontiersCalChart(){
           marginBottom: 6,
         }}
       >
-        Frontiers + Extended CAL (x3.0, rf=3.50%)
+        Frontiers + Extended CAL (rf=3.50%)
       </div>
 
       <ResponsiveContainer width="100%" height="90%">
@@ -146,3 +135,5 @@ export default function FrontiersCalChart(){
     </div>
   );
 }
+
+export default FrontiersCalChart;

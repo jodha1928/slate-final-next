@@ -17,16 +17,16 @@ export default function SlateProtocolIncome() {
   const sectionRef = useRef(null);
   const wasVisibleRef = useRef(false);
 
-   useEffect(() => {
-      const checkMobile = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-  
-      checkMobile(); // initial run
-      window.addEventListener("resize", checkMobile);
-  
-      return () => window.removeEventListener("resize", checkMobile);
-    }, []);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile(); // initial run
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Observe section visibility
   useEffect(() => {
