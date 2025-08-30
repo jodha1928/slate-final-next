@@ -189,7 +189,47 @@ export default function FrontiersCalChart() {
             formatter={(value: number, name: string) => [fmt(value), name]}
             labelFormatter={(label: number) => `Volatility: ${pct(label)}`}
           />
-          <Legend verticalAlign="bottom" align="right" />
+          <Legend
+            verticalAlign="bottom"
+            align="right"
+            content={({ payload }) => (
+              <ul style={{ display: "flex", justifyContent: "center", fontSize: "11px", gap: 16, listStyle: "none", margin: 0, transform: "translateY(20px)", padding: 0 }}>
+                {payload.map((entry) => (
+                  <li key={entry.value} style={{ color: entry.color, display: "flex", alignItems: "center" }}>
+                    <svg width="12" height="12" style={{ marginRight: 4 }}>
+                      <circle cx="6" cy="6" r="5" fill={entry.color} />
+                    </svg>
+                    {entry.value}
+                  </li>
+                ))}
+                {/* Custom legend items for ReferenceLine and ReferenceDot */}
+                <li style={{ display: "flex", alignItems: "center" }}>
+                  <svg width="16" height="6" style={{ marginRight: 4 }}>
+                    <line x1="0" y1="3" x2="16" y2="3" stroke="#8884d8" strokeDasharray="6 6" strokeWidth="2" />
+                  </svg>
+                  CAL Extended (No SF)
+                </li>
+                <li style={{ display: "flex", alignItems: "center" }}>
+                  <svg width="16" height="6" style={{ marginRight: 4 }}>
+                    <line x1="0" y1="3" x2="16" y2="3" stroke="#82ca9d" strokeDasharray="6 6" strokeWidth="2" />
+                  </svg>
+                  CAL Extended (With SF)
+                </li>
+                <li style={{ display: "flex", alignItems: "center" }}>
+                  <svg width="12" height="12" style={{ marginRight: 4 }}>
+                    <circle cx="6" cy="6" r="6" fill="#8884d8" />
+                  </svg>
+                  Tangency (No SF)
+                </li>
+                <li style={{ display: "flex", alignItems: "center" }}>
+                  <svg width="12" height="12" style={{ marginRight: 4 }}>
+                    <circle cx="6" cy="6" r="6" fill="#82ca9d" />
+                  </svg>
+                  Tangency (With SF)
+                </li>
+              </ul>
+            )}
+          />
 
           {/* Efficient Frontiers (union-by-x) */}
           <Line
@@ -214,18 +254,18 @@ export default function FrontiersCalChart() {
           {/* CALs (dashed) */}
           <ReferenceLine
             segment={calNoSF}
+            stroke="#8884d8"
             strokeDasharray="6 6"
-            label="CAL Extended (No SF)"
           />
           <ReferenceLine
             segment={calWithSF}
+            stroke="#82ca9d"
             strokeDasharray="6 6"
-            label="CAL Extended (With SF)"
           />
 
           {/* Tangency markers from CSV (max Sharpe) */}
-          <ReferenceDot x={tanNoSF.x} y={tanNoSF.y} r={6} label="Tangency (No SF)" />
-          <ReferenceDot x={tanWithSF.x} y={tanWithSF.y} r={6} label="Tangency (With SF)" />
+          <ReferenceDot x={tanNoSF.x} y={tanNoSF.y} r={6} fill="#8884d8" />
+          <ReferenceDot x={tanWithSF.x} y={tanWithSF.y} r={6} fill="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
     </div>
