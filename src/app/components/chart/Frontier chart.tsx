@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   LineChart,
   Line,
@@ -13,50 +13,139 @@ import {
   ReferenceDot,
   ReferenceLine,
 } from "recharts";
-import * as d3 from "d3"; // for CSV parsing
+import * as d3 from "d3"; // npm i d3
 
+type Row = { Curve: string; Volatility: number; Return: number };
 type Pt = { x: number; noSF?: number; withSF?: number };
 
-const rf = 0.035;
+const RF = 0.035; // 3.5%
 
-function FrontiersCalChart() {
-  const [data, setData] = useState<Pt[]>([]);
+const pct = (v: number) => `${(v * 100).toFixed(0)}%`;
+const fmt = (v: number) => v.toFixed(3);
+
+/** Build union-by-x rows so lines share the same X axis correctly */
+function mergeByX(noSF: Row[], withSF: Row[]): Pt[] {
+  const map = new Map<string, Pt>();
+  const key = (x: number) => x.toFixed(6); // stabilize float keys
+
+  for (const r of noSF) {
+    const k = key(r.Volatility);
+    const obj = map.get(k) ?? { x: r.Volatility };
+    obj.noSF = r.Return;
+    map.set(k, obj);
+  }
+  for (const r of withSF) {
+    const k = key(r.Volatility);
+    const obj = map.get(k) ?? { x: r.Volatility };
+    obj.withSF = r.Return;
+    map.set(k, obj);
+  }
+  return Array.from(map.values()).sort((a, b) => a.x - b.x);
+}
+
+/** Max Sharpe tangency from a curve */
+function tangency(rows: Row[]) {
+  if (rows.length === 0) return { x: 0, y: RF, sharpe: 0 };
+  let best = rows[0];
+  let bestSR = (best.Return - RF) / best.Volatility;
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    const sr = (r.Return - RF) / r.Volatility;
+    if (sr > bestSR) {
+      best = r;
+      bestSR = sr;
+    }
+  }
+  return { x: best.Volatility, y: best.Return, sharpe: bestSR };
+}
+
+/** CAL from (0, RF) to xEnd using tangency slope */
+function calSegment(tan: { x: number; y: number }, xEnd: number) {
+  const slope = (tan.y - RF) / tan.x;
+  const yEnd = RF + slope * xEnd;
+  return [
+    { x: 0, y: RF },
+    { x: xEnd, y: yEnd },
+  ] as const;
+}
+
+export default function FrontiersCalChart() {
+  const [rows, setRows] = useState<Row[] | null>(null);
 
   useEffect(() => {
-    d3.csv("/data/frontier.csv", d3.autoType).then((rows) => {
-      // Separate curves
-      const noSF = rows.filter((r) => r.Curve === "Frontier_No_SF");
-      const withSF = rows.filter((r) => r.Curve === "Frontier_With_SF");
-
-      // Merge into unified rows by volatility
-      const merged: Pt[] = noSF.map((row, i) => ({
-        x: row.Volatility,
-        noSF: row.Return,
-        withSF: withSF[i] ? withSF[i].Return : undefined,
+    d3.csv("/data/frontier.csv", d3.autoType).then((r) => {
+      // ensure numeric
+      const cast = (r as unknown as Row[]).map((d) => ({
+        Curve: String(d.Curve),
+        Volatility: +d.Volatility,
+        Return: +d.Return,
       }));
-
-      setData(merged);
+      setRows(cast);
     });
   }, []);
 
-  // Example tangency points (replace with actual logic if needed)
-  const tangencyNoSF = { x: 0.13, y: 0.122 };
-  const tangencySF = { x: 0.045, y: 0.108 };
+  const {
+    data,
+    noSF,
+    withSF,
+    tanNoSF,
+    tanWithSF,
+    calNoSF,
+    calWithSF,
+    xMax,
+    yMin,
+    yMax,
+  } = useMemo(() => {
+    const empty = {
+      data: [] as Pt[],
+      noSF: [] as Row[],
+      withSF: [] as Row[],
+      tanNoSF: { x: 0, y: RF, sharpe: 0 },
+      tanWithSF: { x: 0, y: RF, sharpe: 0 },
+      calNoSF: [{ x: 0, y: RF }, { x: 0, y: RF }] as const,
+      calWithSF: [{ x: 0, y: RF }, { x: 0, y: RF }] as const,
+      xMax: 0.6,
+      yMin: RF,
+      yMax: 0.30,
+    };
+    if (!rows) return empty;
 
-  const calSegment = (tangency: { x: number; y: number }, xEnd: number) => {
-    const slope = (tangency.y - rf) / tangency.x;
-    const yEnd = rf + slope * xEnd;
-    return [
-      { x: 0, y: rf },
-      { x: xEnd, y: yEnd },
-    ] as const;
-  };
+    const noSF = rows.filter((r) => r.Curve === "Frontier_No_SF").sort((a, b) => a.Volatility - b.Volatility);
+    const withSF = rows.filter((r) => r.Curve === "Frontier_With_SF").sort((a, b) => a.Volatility - b.Volatility);
 
-  const calNoSF = calSegment(tangencyNoSF, 0.40);
-  const calSF = calSegment(tangencySF, 0.15);
+    const data = mergeByX(noSF, withSF);
 
-  const pct = (v: number) => `${(v * 100).toFixed(0)}%`;
-  const fmt = (v: number) => v.toFixed(3);
+    // tangencies via max Sharpe
+    const tanNoSF = tangency(noSF);
+    const tanWithSF = tangency(withSF);
+
+    // axis domains inclusive of CAL ends
+    const xMaxData = Math.max(
+      data.length ? data[data.length - 1].x : 0.6,
+      tanNoSF.x * 3,
+      tanWithSF.x * 3
+    );
+    const xMax = Math.min(0.6, Math.max(0.2, xMaxData)); // cap like your ref
+
+    const calNoSF = calSegment({ x: tanNoSF.x, y: tanNoSF.y }, Math.min(xMax, tanNoSF.x * 3));
+    const calWithSF = calSegment({ x: tanWithSF.x, y: tanWithSF.y }, Math.min(xMax, tanWithSF.x * 3));
+
+    const allY = [
+      RF,
+      ...noSF.map((r) => r.Return),
+      ...withSF.map((r) => r.Return),
+      calNoSF[1].y,
+      calWithSF[1].y,
+    ];
+    const yMin = Math.min(...allY) - 0.005;
+    const yMax = Math.max(...allY) + 0.01;
+
+    return { data, noSF, withSF, tanNoSF, tanWithSF, calNoSF, calWithSF, xMax, yMin, yMax };
+  }, [rows]);
+
+  if (!rows) {
+    return <div style={{ width: 925, height: 400, display: "grid", placeItems: "center" }}>Loading…</div>;
+  }
 
   return (
     <div
@@ -77,35 +166,40 @@ function FrontiersCalChart() {
           marginBottom: 6,
         }}
       >
-        Frontiers + Extended CAL (rf=3.50%)
+        Frontiers + Extended CAL (x3.0, rf=3.50%)
       </div>
 
       <ResponsiveContainer width="100%" height="90%">
         <LineChart data={data} margin={{ top: 8, right: 24, left: 8, bottom: 16 }}>
           <CartesianGrid strokeOpacity={0.3} />
           <XAxis
+            type="number"
             dataKey="x"
+            domain={[0, xMax]}
             tickFormatter={pct}
             label={{ value: "Volatility (Std Dev)", position: "insideBottom", offset: -8 }}
           />
           <YAxis
-            domain={[0.03, 0.30]}
+            type="number"
+            domain={[yMin, yMax]}
             tickFormatter={pct}
             label={{ value: "Expected Return", angle: -90, position: "insideLeft" }}
           />
           <Tooltip
-            formatter={(value: number) => fmt(value)}
+            formatter={(value: number, name: string) => [fmt(value), name]}
             labelFormatter={(label: number) => `Volatility: ${pct(label)}`}
           />
           <Legend verticalAlign="bottom" align="right" />
 
-          {/* Efficient Frontiers */}
+          {/* Efficient Frontiers (union-by-x) */}
           <Line
             type="monotone"
             dataKey="noSF"
             name="Frontier (No SF)"
             dot={{ r: 3 }}
             strokeWidth={2}
+            isAnimationActive={false}
+            connectNulls
           />
           <Line
             type="monotone"
@@ -113,27 +207,27 @@ function FrontiersCalChart() {
             name="Frontier (With SF)"
             dot={{ r: 3 }}
             strokeWidth={2}
+            isAnimationActive={false}
+            connectNulls
           />
 
-          {/* CAL (dashed) */}
+          {/* CALs (dashed) */}
           <ReferenceLine
             segment={calNoSF}
             strokeDasharray="6 6"
             label="CAL Extended (No SF)"
           />
           <ReferenceLine
-            segment={calSF}
+            segment={calWithSF}
             strokeDasharray="6 6"
             label="CAL Extended (With SF)"
           />
 
-          {/* Tangency markers */}
-          <ReferenceDot x={tangencyNoSF.x} y={tangencyNoSF.y} r={6} label="Tangency (No SF)" />
-          <ReferenceDot x={tangencySF.x} y={tangencySF.y} r={6} label="Tangency (With SF)" />
+          {/* Tangency markers from CSV (max Sharpe) */}
+          <ReferenceDot x={tanNoSF.x} y={tanNoSF.y} r={6} label="Tangency (No SF)" />
+          <ReferenceDot x={tanWithSF.x} y={tanWithSF.y} r={6} label="Tangency (With SF)" />
         </LineChart>
       </ResponsiveContainer>
     </div>
   );
 }
-
-export default FrontiersCalChart;
